@@ -51,7 +51,7 @@ namespace Assets.Scripts
             startAppButton.interactable = true;
             locationPermissionDeniedMessage?.SetActive(false);
 
-            LocationUpdater.instance.StartLocationUpdates();
+            LocationUpdater.Instance.StartLocationUpdates();
         }
 
         public void LoadScene(int sceneIndex = 1)

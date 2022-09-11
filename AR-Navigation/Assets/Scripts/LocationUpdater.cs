@@ -6,7 +6,7 @@ namespace Assets.Scripts
 {
     public class LocationUpdater : MonoBehaviour
     {
-        public static LocationUpdater instance;
+        public static LocationUpdater Instance { get; private set; }
         private bool isUpdating = true;
         [SerializeField] private float updateInterval = 1f;
 
@@ -22,7 +22,7 @@ namespace Assets.Scripts
                 return;
             }
 
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
 

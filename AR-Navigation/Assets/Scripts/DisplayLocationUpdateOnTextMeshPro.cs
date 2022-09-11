@@ -11,7 +11,7 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            locationUpdater = LocationUpdater.instance;
+            locationUpdater = LocationUpdater.Instance;
             if(locationUpdater != null)
                 locationUpdater.onLocationCompassDataUpdatedEvent += LocationUpdater_onLocationCompassDataUpdatedEvent;
         }
