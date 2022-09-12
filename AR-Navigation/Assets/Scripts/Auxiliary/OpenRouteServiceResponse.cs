@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Auxiliary
+namespace Assets.Scripts.Auxiliary.OSR
 {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Engine
@@ -79,24 +79,5 @@ namespace Assets.Scripts.Auxiliary
     {
         public double distance { get; set; }
         public double duration { get; set; }
-    }
-
-    public class PropertiesNominatim
-    {
-        public int place_id { get; set; }
-        public string osm_type { get; set; }
-        public long osm_id { get; set; }
-        public string display_name { get; set; }
-        public int place_rank { get; set; }
-        public string category { get; set; }
-        public string type { get; set; }
-        public double importance { get; set; }
-    }
-
-    public class NominatimResponse
-    {
-        public string type { get; set; }
-        public string licence { get; set; }
-        public List<Feature> features { get; set; }
     }
 }
