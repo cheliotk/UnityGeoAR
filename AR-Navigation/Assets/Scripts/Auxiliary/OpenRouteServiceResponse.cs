@@ -17,7 +17,7 @@ namespace Assets.Scripts.Auxiliary
     {
         public List<double> bbox { get; set; }
         public string type { get; set; }
-        public Properties properties { get; set; }
+        public PropertiesOSR properties { get; set; }
         public Geometry geometry { get; set; }
     }
 
@@ -36,7 +36,7 @@ namespace Assets.Scripts.Auxiliary
         public Engine engine { get; set; }
     }
 
-    public class Properties
+    public class PropertiesOSR
     {
         public List<Segment> segments { get; set; }
         public Summary summary { get; set; }
@@ -81,5 +81,22 @@ namespace Assets.Scripts.Auxiliary
         public double duration { get; set; }
     }
 
+    public class PropertiesNominatim
+    {
+        public int place_id { get; set; }
+        public string osm_type { get; set; }
+        public long osm_id { get; set; }
+        public string display_name { get; set; }
+        public int place_rank { get; set; }
+        public string category { get; set; }
+        public string type { get; set; }
+        public double importance { get; set; }
+    }
 
+    public class NominatimResponse
+    {
+        public string type { get; set; }
+        public string licence { get; set; }
+        public List<Feature> features { get; set; }
+    }
 }
