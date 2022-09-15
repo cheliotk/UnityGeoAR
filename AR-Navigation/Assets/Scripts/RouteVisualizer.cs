@@ -21,8 +21,11 @@ namespace Assets.Scripts
         [SerializeField] private GameObject waypointPrefab;
         private RoutingHandler routingHandler;
 
+        private SceneControllerBase sceneController;
+
         private void Start()
         {
+            sceneController = FindObjectOfType<SceneControllerBase>();
             routingHandler = RoutingHandler.Instance;
             if (routingHandler != null)
                 routingHandler.onRouteReceived += RoutingHandler_onRouteReceived;
@@ -36,6 +39,7 @@ namespace Assets.Scripts
 
         private void RoutingHandler_onRouteReceived(object sender, OpenRouteServiceResponse response)
         {
+            routeVisualizationType = sceneController.routeVisualizationType;
             if (response?.features != null)
             {
                 List<Vector2> locationsList = new List<Vector2>();
@@ -66,13 +70,17 @@ namespace Assets.Scripts
 
         private async void VisualizeRouteWithElevations(List<Vector2> locationsList)
         {
+            routeVisualizationType = sceneController.routeVisualizationType;
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
                 OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(locationsList);
                 var startCoord = elevationsResponse.results[0];
                 foreach (var coord in elevationsResponse.results)
                 {
-                    Vector3 point = new Vector3((float)(coord.longitude - startCoord.longitude) * scaleModifier, (float)coord.elevation, (float)(coord.latitude - startCoord.latitude) * scaleModifier);
+                    float x = (float)(coord.longitude - sceneController.GetLocationAtSceneLoad().x) * scaleModifier;
+                    float z = (float)(coord.latitude - sceneController.GetLocationAtSceneLoad().y) * scaleModifier;
+                    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
+                    Vector3 point = new Vector3(x, y, z);
                     Instantiate(waypointPrefab, point, Quaternion.identity, containerOpenElevation);
                 }
             }
@@ -83,9 +91,9 @@ namespace Assets.Scripts
 
                 foreach (var coord in elevationsResponse.results)
                 {
-                    float x = (float)(coord.location.lng - startCoord.location.lng) * scaleModifier;
-                    float z = (float)(coord.location.lat - startCoord.location.lat) * scaleModifier;
-                    float y = (float)(coord.elevation);
+                    float x = (float)(coord.location.lng - sceneController.GetLocationAtSceneLoad().x) * scaleModifier;
+                    float z = (float)(coord.location.lat - sceneController.GetLocationAtSceneLoad().y) * scaleModifier;
+                    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
                     Vector3 point = new Vector3(x, y, z);
 
                     Transform container = routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM ? containerOpenTopoData_EUDEM : containerOpenTopoData_ASTER;

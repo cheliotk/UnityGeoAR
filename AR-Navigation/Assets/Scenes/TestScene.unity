@@ -641,7 +641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scaleModifier: 10000
-  routeVisualizationType: 0
+  routeVisualizationType: 1
   containerNoElevation: {fileID: 936428981}
   containerOpenElevation: {fileID: 1172230362}
   containerOpenTopoData_ASTER: {fileID: 1036507536}
