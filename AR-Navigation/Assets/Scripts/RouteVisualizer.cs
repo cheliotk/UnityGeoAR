@@ -79,8 +79,8 @@ namespace Assets.Scripts
                 var startCoord = elevationsResponse.results[0];
                 foreach (var coord in elevationsResponse.results)
                 {
-                    float x = (float)(coord.longitude - sceneController.GetLocationAtSceneLoad().x) * scaleModifier;
-                    float z = (float)(coord.latitude - sceneController.GetLocationAtSceneLoad().y) * scaleModifier;
+                    float x = (float)(coord.longitude - sceneController.GetLocationAtSceneLoad().y) * scaleModifier;
+                    float z = (float)(coord.latitude - sceneController.GetLocationAtSceneLoad().x) * scaleModifier;
                     float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
                     Vector3 point = new Vector3(x, y, z);
                     Instantiate(waypointPrefab, point, Quaternion.identity, containerOpenElevation);
@@ -93,8 +93,8 @@ namespace Assets.Scripts
 
                 foreach (var coord in elevationsResponse.results)
                 {
-                    float x = (float)(coord.location.lng - sceneController.GetLocationAtSceneLoad().x) * scaleModifier;
-                    float z = (float)(coord.location.lat - sceneController.GetLocationAtSceneLoad().y) * scaleModifier;
+                    float x = (float)(coord.location.lng - sceneController.GetLocationAtSceneLoad().y) * scaleModifier;
+                    float z = (float)(coord.location.lat - sceneController.GetLocationAtSceneLoad().x) * scaleModifier;
                     float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
                     Vector3 point = new Vector3(x, y, z);
 

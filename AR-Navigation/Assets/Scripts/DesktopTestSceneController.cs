@@ -13,8 +13,9 @@ namespace Assets.Scripts
 
         private async void SetDefaultValues()
         {
-            locationAtSceneLoad = new Vector2(23.74127f, 38.01408f);
-            List<Vector2> locations = new List<Vector2>() { locationAtSceneLoad };
+            locationAtSceneLoad = new Vector2(38.01408f, 23.74127f);
+            Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
+            List<Vector2> locations = new List<Vector2>() { tempLoc };
 
             var resASTER = await ElevationQueryHandler.Instance.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER);
             elevationOpenTopoData_ASTER = resASTER.results[0].elevation;

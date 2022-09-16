@@ -13,12 +13,14 @@ namespace Assets.Scripts
         public static RoutingHandler Instance { get; private set; }
         public event EventHandler<OpenRouteServiceResponse> onRouteReceived;
 
-        private string directionsApiBase = "https://api.openrouteservice.org/v2/directions";
-        private string directionsProfile = "foot-walking";
         [SerializeField] private Vector2 startLatLong = new Vector2(38.01408f, 23.74127f);
         [SerializeField] private Vector2 endLatLong = new Vector2(38.02369f, 23.73612f);
 
         [SerializeField] APIKeyContainer apiKeyContainer;
+
+        private string directionsApiBase = "https://api.openrouteservice.org/v2/directions";
+        private string directionsProfile = "foot-walking";
+        private SceneControllerBase sceneController;
 
         private void Awake()
         {
@@ -31,6 +33,15 @@ namespace Assets.Scripts
 
             Instance = this;
         }
+
+        private void Start()
+        {
+            sceneController = FindObjectOfType<SceneControllerBase>();
+            startLatLong = sceneController.GetLocationAtSceneLoad();
+        }
+
+        public void SetTargetLocation(Vector2 targetLatLong) => endLatLong = targetLatLong;
+        public void StartQueryWithCurrentParameters() => RouteDirections_GET();
 
         [ContextMenu("RunQuery")]
         public void StartDefaultQuery()
