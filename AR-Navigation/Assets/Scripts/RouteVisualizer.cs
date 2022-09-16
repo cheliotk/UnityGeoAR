@@ -42,6 +42,7 @@ namespace Assets.Scripts
             routeVisualizationType = sceneController.routeVisualizationType;
             if (response?.features != null)
             {
+                ClearCurrentWaypoints(routeVisualizationType);
                 List<Vector2> locationsList = new List<Vector2>();
                 foreach (Feature feature in response.features)
                 {
@@ -71,6 +72,7 @@ namespace Assets.Scripts
         private async void VisualizeRouteWithElevations(List<Vector2> locationsList)
         {
             routeVisualizationType = sceneController.routeVisualizationType;
+            ClearCurrentWaypoints(routeVisualizationType);
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
                 OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(locationsList);
@@ -99,6 +101,34 @@ namespace Assets.Scripts
                     Transform container = routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM ? containerOpenTopoData_EUDEM : containerOpenTopoData_ASTER;
                     Instantiate(waypointPrefab, point, Quaternion.identity, container);
                 }
+            }
+        }
+
+        private void ClearCurrentWaypoints(RouteVisualizationType routeVisualizationType)
+        {
+            Transform container;
+            switch (routeVisualizationType)
+            {
+                case RouteVisualizationType.NO_ELEVATION:
+                    container = containerNoElevation;
+                    break;
+                case RouteVisualizationType.ELEVATION_OPEN_ELEVATION:
+                    container = containerOpenElevation;
+                    break;
+                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM:
+                    container = containerOpenTopoData_EUDEM;
+                    break;
+                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER:
+                    container = containerOpenTopoData_ASTER;
+                    break;
+                default:
+                    container = containerNoElevation;
+                    break;
+            }
+
+            foreach (Transform child in container.transform)
+            {
+                Destroy(child.gameObject);
             }
         }
     }
