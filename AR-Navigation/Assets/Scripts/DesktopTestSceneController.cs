@@ -13,7 +13,10 @@ namespace Assets.Scripts
 
         private async void SetDefaultValues()
         {
-            locationAtSceneLoad = new Vector2(38.01408f, 23.74127f);
+            if(Mathf.Approximately((Vector2.zero - locationAtSceneLoad).magnitude, 0f))
+            {
+                locationAtSceneLoad = new Vector2(37.975321f, 23.780022f);
+            }
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };
 

@@ -7,7 +7,7 @@ namespace Assets.Scripts
     public class SceneControllerBase : MonoBehaviour, ISceneController
     {
         [SerializeField] protected RouteVisualizationType _routeVisualizationType;
-        protected Vector2 locationAtSceneLoad;
+        [SerializeField] protected Vector2 locationAtSceneLoad;
         protected float elevationOpenElevation;
         protected float elevationOpenTopoData_EUDEM;
         protected float elevationOpenTopoData_ASTER;

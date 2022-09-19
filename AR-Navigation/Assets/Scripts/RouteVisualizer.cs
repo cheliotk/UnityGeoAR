@@ -56,6 +56,7 @@ namespace Assets.Scripts
                         }
                         else
                         {
+                            ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord[1], (float)coord[0]);
                             Vector3 point = new Vector3((float)coord[0] - (float)coords[0][0], 0f, (float)coord[1] - (float)coords[0][1]);
                             Instantiate(waypointPrefab, point * scaleModifier, Quaternion.identity, containerNoElevation);
                         }
