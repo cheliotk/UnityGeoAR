@@ -61,7 +61,7 @@ namespace Assets.Scripts
                             Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord[1], (float)coord[0]);
                             Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
                             GameObject waypoint = Instantiate(waypointPrefab, point, Quaternion.identity, containerNoElevation);
-                            waypoint.name = $"Waypoint:{coord[0]},{coord[1]}";
+                            waypoint.name = $"Waypoint:{coord[1]},{coord[0]}";
                         }
                     }
                 }
