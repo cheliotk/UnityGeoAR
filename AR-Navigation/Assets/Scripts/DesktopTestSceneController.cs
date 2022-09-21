@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Auxiliary;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ namespace Assets.Scripts
             {
                 locationAtSceneLoad = new Vector2(37.975321f, 23.780022f);
             }
+
+            locationGGRS87AtSceneLoad = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87(locationAtSceneLoad.x, locationAtSceneLoad.y);
+
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };
 

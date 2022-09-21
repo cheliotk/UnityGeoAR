@@ -7,6 +7,7 @@ namespace Assets.Scripts
     {
         RouteVisualizationType routeVisualizationType { get; set; }
         Vector2 GetLocationAtSceneLoad();
+        Vector2 GetPositionGGRS87AtSceneLoad();
         float GetElevationAtSceneLoad();
     }
 }

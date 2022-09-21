@@ -8,6 +8,7 @@ namespace Assets.Scripts
     {
         [SerializeField] protected RouteVisualizationType _routeVisualizationType;
         [SerializeField] protected Vector2 locationAtSceneLoad;
+        protected Vector2 locationGGRS87AtSceneLoad;
         protected float elevationOpenElevation;
         protected float elevationOpenTopoData_EUDEM;
         protected float elevationOpenTopoData_ASTER;
@@ -40,5 +41,7 @@ namespace Assets.Scripts
         }
 
         public Vector2 GetLocationAtSceneLoad() => locationAtSceneLoad;
+
+        public Vector2 GetPositionGGRS87AtSceneLoad() => locationGGRS87AtSceneLoad;
     }
 }

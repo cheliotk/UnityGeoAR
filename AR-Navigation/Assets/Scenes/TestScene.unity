@@ -322,6 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _routeVisualizationType: 0
+  locationAtSceneLoad: {x: 38.014076, y: 23.741245}
 --- !u!4 &803423260
 Transform:
   m_ObjectHideFlags: 0
