@@ -14,7 +14,6 @@ namespace Assets.Scripts.Auxiliary
             ProjectionInfo destination = ProjectionInfo.FromEpsgCode(2100);
             Reproject.ReprojectPoints(latLongs, heights, source, destination, 0, heights.Length);
 
-            Debug.Log($"{latLongs[0]} | {latLongs[1]}");
             return new Vector2((float)latLongs[0], (float)latLongs[1]);
         }
     }

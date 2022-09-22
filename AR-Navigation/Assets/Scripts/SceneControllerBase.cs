@@ -12,6 +12,7 @@ namespace Assets.Scripts
         protected float elevationOpenElevation;
         protected float elevationOpenTopoData_EUDEM;
         protected float elevationOpenTopoData_ASTER;
+        protected float compassHeadingAtSceneLoad;
 
         public RouteVisualizationType routeVisualizationType
         {
@@ -21,7 +22,6 @@ namespace Assets.Scripts
             }
             set { }
         }
-
 
         public float GetElevationAtSceneLoad()
         {
@@ -43,5 +43,8 @@ namespace Assets.Scripts
         public Vector2 GetLocationAtSceneLoad() => locationAtSceneLoad;
 
         public Vector2 GetPositionGGRS87AtSceneLoad() => locationGGRS87AtSceneLoad;
+
+        public float GetCompassHeadingAtSceneLoad() => compassHeadingAtSceneLoad;
+
     }
 }

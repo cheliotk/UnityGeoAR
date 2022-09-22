@@ -9,5 +9,6 @@ namespace Assets.Scripts
         Vector2 GetLocationAtSceneLoad();
         Vector2 GetPositionGGRS87AtSceneLoad();
         float GetElevationAtSceneLoad();
+        float GetCompassHeadingAtSceneLoad();
     }
 }

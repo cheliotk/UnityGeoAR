@@ -1,13 +1,9 @@
 ﻿using Assets.Scripts.Auxiliary;
-using Assets.Scripts.Auxiliary.Nominatim;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
-using UnityEditor.Search;
 using UnityEngine;
 
 namespace Assets.Scripts
