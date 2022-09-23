@@ -28,7 +28,7 @@ namespace Assets.Scripts
             switch (_routeVisualizationType)
             {
                 case RouteVisualizationType.NO_ELEVATION:
-                    return 0f;
+                    return 1f;
                 case RouteVisualizationType.ELEVATION_OPEN_ELEVATION:
                     return elevationOpenElevation;
                 case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM:
@@ -36,7 +36,7 @@ namespace Assets.Scripts
                 case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER:
                     return elevationOpenTopoData_ASTER;
                 default:
-                    return 0f;
+                    return 1f;
             }
         }
 

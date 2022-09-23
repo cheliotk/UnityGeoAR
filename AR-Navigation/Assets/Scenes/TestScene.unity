@@ -164,6 +164,7 @@ MonoBehaviour:
   containerOpenTopoData_ASTER: {fileID: 1036507536}
   containerOpenTopoData_EUDEM: {fileID: 1315827931}
   waypointPrefab: {fileID: 1551917230273551044, guid: ea64ac07443aca044b321ca87edb848b, type: 3}
+  linePrefab: {fileID: 2228299255252102848, guid: 03c61d3657ae1a747a658ac1ac721c6c, type: 3}
 --- !u!4 &590340536
 Transform:
   m_ObjectHideFlags: 0
