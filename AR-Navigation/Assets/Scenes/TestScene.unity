@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d060096b9443f6d4092fe6e471cbc1ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _routeVisualizationType: 0
+  _routeVisualizationType: 1
   locationAtSceneLoad: {x: 38.014053, y: 23.741268}
 --- !u!4 &803423260
 Transform:

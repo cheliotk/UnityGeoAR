@@ -61,6 +61,7 @@ namespace Assets.Scripts
             {
                 startLatLong = sceneController.GetCurrentLocation();
                 var baseAddress = new Uri($"{directionsApiBase}/{directionsProfile}?api_key={apiKeyContainer.OpenRouteServiceApiKey}&start={startLatLong.y},{startLatLong.x}&end={endLatLong.y},{endLatLong.x}");
+                //Debug.Log($"route request: {baseAddress}");
                 using (var httpClient = new HttpClient { BaseAddress = baseAddress })
                 {
                     httpClient.DefaultRequestHeaders.Clear();
@@ -68,15 +69,19 @@ namespace Assets.Scripts
 
                     using (var response = await httpClient.GetAsync(baseAddress))
                     {
+                        //Debug.Log($"1: {response}");
                         string responseData = await response.Content.ReadAsStringAsync();
+                        //Debug.Log($"2: {responseData}");
+
                         if (response.IsSuccessStatusCode)
                         {
                             OpenRouteServiceResponse route = JsonConvert.DeserializeObject<OpenRouteServiceResponse>(responseData);
+                            //Debug.Log($"3: route with {route.features.Count} features");
                             onRouteReceived?.Invoke(this, route);
                         }
                         else
                         {
-                            string exceptionMessage = $"routing request for {baseAddress} failed with response {response}";
+                            string exceptionMessage = $"routing request το {directionsApiBase} failed with response {response}";
                             Debug.LogWarning(exceptionMessage);
                             throw new Exception(exceptionMessage);
                         }

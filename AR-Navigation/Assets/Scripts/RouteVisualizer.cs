@@ -98,7 +98,7 @@ namespace Assets.Scripts
                 {
                     Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.latitude, (float)coord.longitude);
 
-                    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
+                    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad() - 1f);
                     Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
                     
                     waypointPositions.Add(point);
