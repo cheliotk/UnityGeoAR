@@ -48,6 +48,10 @@ namespace Assets.Scripts
         public float GetCompassHeadingAtSceneLoad() => compassHeadingAtSceneLoad;
 
         public abstract Vector2 GetCurrentLocation();
+        public void SetRouteVisualizationType(RouteVisualizationType routeVisualizationType)
+        {
+            _routeVisualizationType = routeVisualizationType;
+        }
 
     }
 }
