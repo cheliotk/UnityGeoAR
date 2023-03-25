@@ -39,5 +39,10 @@ namespace Assets.Scripts
         {
             RoutingHandler.Instance.StartDefaultQuery();
         }
+
+        public override Vector2 GetCurrentLocation()
+        {
+            return GetLocationAtSceneLoad();
+        }
     }
 }

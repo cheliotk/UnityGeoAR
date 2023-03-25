@@ -52,28 +52,42 @@ namespace Assets.Scripts
         public async void RouteDirections_GET()
         {
             if (apiKeyContainer == null)
-                return;
-
-            var baseAddress = new Uri($"{directionsApiBase}/{directionsProfile}?api_key={apiKeyContainer.OpenRouteServiceApiKey}&start={startLatLong.y},{startLatLong.x}&end={endLatLong.y},{endLatLong.x}");
-            using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {
-                httpClient.DefaultRequestHeaders.Clear();
-                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
+                Debug.LogError("No apiKey found");
+                return;
+            }
 
-                using (var response = await httpClient.GetAsync(baseAddress))
+            try
+            {
+                startLatLong = sceneController.GetCurrentLocation();
+                var baseAddress = new Uri($"{directionsApiBase}/{directionsProfile}?api_key={apiKeyContainer.OpenRouteServiceApiKey}&start={startLatLong.y},{startLatLong.x}&end={endLatLong.y},{endLatLong.x}");
+                using (var httpClient = new HttpClient { BaseAddress = baseAddress })
                 {
-                    string responseData = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
+
+                    using (var response = await httpClient.GetAsync(baseAddress))
                     {
-                        OpenRouteServiceResponse route = JsonConvert.DeserializeObject<OpenRouteServiceResponse>(responseData);
-                        onRouteReceived?.Invoke(this, route);
-                    }
-                    else
-                    {
-                        throw new Exception(response.StatusCode.ToString());
+                        string responseData = await response.Content.ReadAsStringAsync();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            OpenRouteServiceResponse route = JsonConvert.DeserializeObject<OpenRouteServiceResponse>(responseData);
+                            onRouteReceived?.Invoke(this, route);
+                        }
+                        else
+                        {
+                            string exceptionMessage = $"routing request for {baseAddress} failed with response {response}";
+                            Debug.LogWarning(exceptionMessage);
+                            throw new Exception(exceptionMessage);
+                        }
                     }
                 }
             }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
     }
 }

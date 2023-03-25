@@ -19,7 +19,7 @@ namespace Assets.Scripts
         {
             LocationCompassData lastLocationData = LocationUpdater.Instance.lastLocationCompassData;
             compassHeadingAtSceneLoad = lastLocationData.compass.trueHeading;
-            locationAtSceneLoad = new Vector2(lastLocationData.location.latitude, lastLocationData.location.longitude);
+            locationAtSceneLoad = ConvertLocationDataToVector2(lastLocationData.location);
             locationGGRS87AtSceneLoad = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87(locationAtSceneLoad.x, locationAtSceneLoad.y);
 
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
@@ -43,6 +43,16 @@ namespace Assets.Scripts
             rot.y = compassHeadingAtSceneLoad;
             AR_origin.transform.rotation = Quaternion.Euler(rot);
 
+        }
+
+        public override Vector2 GetCurrentLocation()
+        {
+            return ConvertLocationDataToVector2(LocationUpdater.Instance.lastLocationCompassData.location);
+        }
+
+        private Vector2 ConvertLocationDataToVector2(LocationData locationData)
+        {
+            return new Vector2(locationData.latitude, locationData.longitude);
         }
     }
 }

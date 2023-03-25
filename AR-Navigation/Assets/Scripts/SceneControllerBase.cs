@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class SceneControllerBase : MonoBehaviour, ISceneController
+    public abstract class SceneControllerBase : MonoBehaviour, ISceneController
     {
         [SerializeField] protected RouteVisualizationType _routeVisualizationType;
         [SerializeField] protected Vector2 locationAtSceneLoad;
+        protected Vector2 locationNow;
         protected Vector2 locationGGRS87AtSceneLoad;
         protected float elevationOpenElevation;
         protected float elevationOpenTopoData_EUDEM;
@@ -45,6 +46,8 @@ namespace Assets.Scripts
         public Vector2 GetPositionGGRS87AtSceneLoad() => locationGGRS87AtSceneLoad;
 
         public float GetCompassHeadingAtSceneLoad() => compassHeadingAtSceneLoad;
+
+        public abstract Vector2 GetCurrentLocation();
 
     }
 }
