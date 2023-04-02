@@ -103,7 +103,7 @@ namespace Assets.Scripts
             while(locationsList.Count > OPENTOPODATA_QUEUE_SIZE)
             {
                 tempLocationsList.AddRange(locationsList.GetRange(0, OPENTOPODATA_QUEUE_SIZE));
-                locationsList.RemoveRange(0, OPENTOPODATA_QUEUE_SIZE);
+                locationsList.RemoveRange(0, OPENTOPODATA_QUEUE_SIZE - 1);
                 await PrepareWaypointBatchWithElevations(startLocation, tempLocationsList, clearStaleWaypoints);
                 clearStaleWaypoints = false;
                 tempLocationsList.Clear();
@@ -186,20 +186,26 @@ namespace Assets.Scripts
             lineContainer.SetParent(container);
             lineContainer.localPosition = Vector3.zero;
 
-            for (int i = 0; i < waypointPositions.Count; i++)
+            for (int i = 1; i < waypointPositions.Count; i++)
             {
                 Vector3 waypointPosition = waypointPositions[i];
-                GameObject waypoint = Instantiate(waypointPrefab, waypointPosition, Quaternion.identity, container);
-                waypoint.name = $"Waypoint:{waypointNames[i]}";
+                string waypointName = $"Waypoint:{waypointNames[i]}";
+                VisualizeWaypoint(container, waypointPosition, waypointName);
 
-                if (i == 0)
-                    continue;
+                //if (i == 0)
+                //    continue;
 
-                GameObject line = Instantiate(linePrefab, waypointPosition, Quaternion.Euler(Vector3.right*90f), lineContainer);
+                GameObject line = Instantiate(linePrefab, waypointPosition, Quaternion.Euler(Vector3.right * 90f), lineContainer);
                 LineRenderer lren = line.GetComponent<LineRenderer>();
                 lren.positionCount = 2;
                 lren.SetPositions(new Vector3[] { waypointPosition, waypointPositions[i - 1] });
             }
+        }
+
+        private void VisualizeWaypoint(Transform container, Vector3 waypointPosition, string waypointName)
+        {
+            GameObject waypoint = Instantiate(waypointPrefab, waypointPosition, Quaternion.identity, container);
+            waypoint.name = waypointName;
         }
 
         private void ClearCurrentWaypoints(RouteVisualizationType routeVisualizationType)
