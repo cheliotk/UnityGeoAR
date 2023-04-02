@@ -12,11 +12,13 @@ namespace Assets.Scripts
     {
         public static ElevationQueryHandler Instance { get; private set; }
 
-        private string openElevationApiBase_GET = "https://api.open-elevation.com/api/v1/lookup?";
+        private const string OPEN_ELEVATION_API_BASE_GET = "https://api.open-elevation.com/api/v1/lookup?";
         private string temp = "https://api.opentopodata.org/v1/aster30m?locations=39.747114,-104.996334";
-        private string openTopoDataApiBase_GET = "https://api.opentopodata.org/v1/";
-        private string openTopoDataDataset_ASTER = "aster30m?";
-        private string openTopoDataDataset_EUDEM = "eudem25m?";
+        private const string OPENTOPODATA_API_BASE_GET = "https://api.opentopodata.org/v1/";
+        private const string OPENTOPODATA_DATASET_ASTER = "aster30m?";
+        private const string OPENTOPODATA_DATASET_EUDEM = "eudem25m?";
+
+        private float lastOpenTopoDataCall = -1f;
 
         private void Awake()
         {
@@ -30,7 +32,7 @@ namespace Assets.Scripts
         public async Task<OpenElevationResponse> MakeOpenElevationQuery(List<Vector2> locations)
         {
             string locationsString = ConstructLocationsListStringFromVector2Array(locations);
-            string query = $"{openElevationApiBase_GET}locations={locationsString}";
+            string query = $"{OPEN_ELEVATION_API_BASE_GET}locations={locationsString}";
             var baseAddress = new Uri(query);
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {
@@ -61,8 +63,8 @@ namespace Assets.Scripts
             
             string locationsString = ConstructLocationsListStringFromVector2Array(locations);
 
-            string dataset = routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM ? openTopoDataDataset_EUDEM : openTopoDataDataset_ASTER;
-            string query = $"{openTopoDataApiBase_GET}{dataset}locations={locationsString}";
+            string dataset = routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM ? OPENTOPODATA_DATASET_EUDEM : OPENTOPODATA_DATASET_ASTER;
+            string query = $"{OPENTOPODATA_API_BASE_GET}{dataset}locations={locationsString}";
             
             var baseAddress = new Uri(query);
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
@@ -71,8 +73,14 @@ namespace Assets.Scripts
                 httpClient.DefaultRequestHeaders.Add("User-Agent", "Unity 2021.3.9f1 AR-Navigation test app");
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json; charset=utf-8");
 
+                while (Time.realtimeSinceStartup - lastOpenTopoDataCall < 1.5f)
+                {
+                    await Task.Delay(100);
+                }
+
                 using (var response = await httpClient.GetAsync(baseAddress))
                 {
+                    lastOpenTopoDataCall = Time.realtimeSinceStartup;
                     string responseData = await response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)
                     {
