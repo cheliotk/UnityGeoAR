@@ -12,7 +12,6 @@ namespace Assets.Scripts
     public class RouteVisualizer : MonoBehaviour
     {
         public int OPENTOPODATA_QUEUE_SIZE = 5;
-        [SerializeField] private float scaleModifier = 100000f;
 
         [SerializeField] private RouteVisualizationType routeVisualizationType = RouteVisualizationType.NO_ELEVATION;
 
@@ -123,17 +122,17 @@ namespace Assets.Scripts
 
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
-                //OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(tempLocationsList);
-                //foreach (var coord in elevationsResponse.results)
-                //{
-                //    Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.latitude, (float)coord.longitude);
+                OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(tempLocationsList);
+                foreach (var coord in elevationsResponse.results)
+                {
+                    Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.latitude, (float)coord.longitude);
 
-                //    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad() - 1f);
-                //    Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
+                    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad() - 1f);
+                    Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
 
-                //    currentWaypointPositions.Add(point);
-                //    waypointNames.Add($"{coord.latitude},{coord.longitude}");
-                //}
+                    currentWaypointPositions.Add(point);
+                    waypointNames.Add($"{coord.latitude},{coord.longitude}");
+                }
             }
             else
             {
@@ -191,9 +190,6 @@ namespace Assets.Scripts
                 Vector3 waypointPosition = waypointPositions[i];
                 string waypointName = $"Waypoint:{waypointNames[i]}";
                 VisualizeWaypoint(container, waypointPosition, waypointName);
-
-                //if (i == 0)
-                //    continue;
 
                 GameObject line = Instantiate(linePrefab, waypointPosition, Quaternion.Euler(Vector3.right * 90f), lineContainer);
                 LineRenderer lren = line.GetComponent<LineRenderer>();

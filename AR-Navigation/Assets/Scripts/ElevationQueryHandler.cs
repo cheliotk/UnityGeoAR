@@ -29,32 +29,32 @@ namespace Assets.Scripts
             Instance = this;
         }
 
-        //public async Task<OpenElevationResponse> MakeOpenElevationQuery(List<Vector2> locations)
-        //{
-        //    string locationsString = ConstructLocationsListStringFromVector2Array(locations);
-        //    string query = $"{OPEN_ELEVATION_API_BASE_GET}locations={locationsString}";
-        //    var baseAddress = new Uri(query);
-        //    using (var httpClient = new HttpClient { BaseAddress = baseAddress })
-        //    {
-        //        httpClient.DefaultRequestHeaders.Clear();
-        //        httpClient.DefaultRequestHeaders.Add("User-Agent", "Unity 2021.3.9f1 AR-Navigation test app");
-        //        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json; charset=utf-8");
+        public async Task<OpenElevationResponse> MakeOpenElevationQuery(List<Vector2> locations)
+        {
+            string locationsString = ConstructLocationsListStringFromVector2Array(locations);
+            string query = $"{OPEN_ELEVATION_API_BASE_GET}locations={locationsString}";
+            var baseAddress = new Uri(query);
+            using (var httpClient = new HttpClient { BaseAddress = baseAddress })
+            {
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Unity 2021.3.9f1 AR-Navigation test app");
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json; charset=utf-8");
 
-        //        using (var response = await httpClient.GetAsync(baseAddress))
-        //        {
-        //            string responseData = await response.Content.ReadAsStringAsync();
-        //            if (response.IsSuccessStatusCode)
-        //            {
-        //                OpenElevationResponse elevationResults = JsonConvert.DeserializeObject<OpenElevationResponse>(responseData);
-        //                return elevationResults;
-        //            }
-        //            else
-        //            {
-        //                throw new Exception(response.StatusCode.ToString() + "\n" + response.ToString());
-        //            }
-        //        }
-        //    }
-        //}
+                using (var response = await httpClient.GetAsync(baseAddress))
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        OpenElevationResponse elevationResults = JsonConvert.DeserializeObject<OpenElevationResponse>(responseData);
+                        return elevationResults;
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + "\n" + response.ToString());
+                    }
+                }
+            }
+        }
 
         public async Task<OpenTopoDataResponse> MakeOpenTopoDataQuery(List<Vector2> locations, RouteVisualizationType routeVisualizationType)
         {

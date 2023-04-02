@@ -10,6 +10,7 @@ namespace Assets.Scripts
     {
         [SerializeField] Button startAppButton;
         [SerializeField] GameObject locationPermissionDeniedMessage;
+        [SerializeField] GameObject initializingMessage;
 
         private void Start()
         {
@@ -48,10 +49,20 @@ namespace Assets.Scripts
         private void SetupMenuWithPermissionsEnabled()
         {
             Debug.Log("Permission granted");
-            startAppButton.interactable = true;
+            startAppButton.GetComponentInChildren<Text>().text = "Initializing...";
+            startAppButton.interactable = false;
             locationPermissionDeniedMessage?.SetActive(false);
 
             LocationUpdater.Instance.StartLocationUpdates();
+
+            LocationUpdater.Instance.onLocationCompassDataUpdatedEvent += Instance_onLocationCompassDataUpdatedEvent;
+        }
+
+        private void Instance_onLocationCompassDataUpdatedEvent(object sender, LocationCompassData e)
+        {
+            initializingMessage?.SetActive(false);
+            startAppButton.GetComponentInChildren<Text>().text = "Start application";
+            startAppButton.interactable = true;
         }
 
         public void LoadScene(int sceneIndex = 1)

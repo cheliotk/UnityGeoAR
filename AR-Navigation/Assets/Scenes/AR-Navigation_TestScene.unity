@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28383f41c76be8c4fb42de3bb4065f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _routeVisualizationType: 0
+  _routeVisualizationType: 3
   locationAtSceneLoad: {x: 0, y: 0}
   AR_origin: {fileID: 1948022999}
   dropdown: {fileID: 1329163098}
@@ -317,8 +317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OPENTOPODATA_QUEUE_SIZE: 20
-  scaleModifier: 100000
-  routeVisualizationType: 0
+  routeVisualizationType: 3
   containerNoElevation: {fileID: 1831715454}
   containerOpenElevation: {fileID: 29176996}
   containerOpenTopoData_ASTER: {fileID: 2080108486}
