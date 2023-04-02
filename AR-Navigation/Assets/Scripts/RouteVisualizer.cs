@@ -4,12 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class RouteVisualizer : MonoBehaviour
     {
+        public int OPENTOPODATA_QUEUE_SIZE = 5;
         [SerializeField] private float scaleModifier = 100000f;
 
         [SerializeField] private RouteVisualizationType routeVisualizationType = RouteVisualizationType.NO_ELEVATION;
@@ -38,76 +40,104 @@ namespace Assets.Scripts
                 routingHandler.onRouteReceived -= RoutingHandler_onRouteReceived;
         }
 
-        private void RoutingHandler_onRouteReceived(object sender, OpenRouteServiceResponse response)
+        private async void RoutingHandler_onRouteReceived(object sender, OpenRouteServiceResponse response)
         {
-            routeVisualizationType = sceneController.routeVisualizationType;
-            if (response?.features != null)
+            try
             {
-                Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
-                ClearCurrentWaypoints(routeVisualizationType);
-                
-                List<Vector2> locationsList = new List<Vector2>();
-                List<Vector3> waypointPositions = new List<Vector3>();
-                List<string> waypointNames = new List<string>();
-
-                foreach (Feature feature in response.features)
+                routeVisualizationType = sceneController.routeVisualizationType;
+                if (response?.features != null)
                 {
-                    List<List<double>> coords = feature.geometry.coordinates;
-                    foreach (List<double> coord in coords)
+                    Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
+                    ClearCurrentWaypoints(routeVisualizationType);
+                
+                    List<Vector2> locationsList = new List<Vector2>();
+                    List<Vector3> waypointPositions = new List<Vector3>();
+                    List<string> waypointNames = new List<string>();
+
+                    foreach (Feature feature in response.features)
                     {
-                        if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
+                        List<List<double>> coords = feature.geometry.coordinates;
+                        foreach (List<double> coord in coords)
                         {
-                            Vector2 location = new Vector2((float)coord[0], (float)coord[1]);
-                            locationsList.Add(location);
-                        }
-                        else
-                        {
-                            Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord[1], (float)coord[0]);
-                            Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
+                            if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
+                            {
+                                Vector2 location = new Vector2((float)coord[0], (float)coord[1]);
+                                locationsList.Add(location);
+                            }
+                            else
+                            {
+                                Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord[1], (float)coord[0]);
+                                Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
                             
-                            waypointPositions.Add(point);
-                            waypointNames.Add($"{coord[1]},{coord[0]}");
+                                waypointPositions.Add(point);
+                                waypointNames.Add($"{coord[1]},{coord[0]}");
+                            }
                         }
                     }
-                }
 
-                if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
-                {
-                    PrepareWaypointsWithElevations(locationsList);
+                    if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
+                    {
+                        await PrepareWaypointsWithElevations(locationsList);
+                    }
+                    else
+                    {
+                        VisualizeRoute(waypointPositions, waypointNames);
+                    }
                 }
-                else
-                {
-                    VisualizeRoute(waypointPositions, waypointNames);
-                }
+            }
+            catch (System.Exception)
+            {
+                throw;
             }
         }
 
-        private async void PrepareWaypointsWithElevations(List<Vector2> locationsList)
+        private async Task PrepareWaypointsWithElevations(List<Vector2> locationsList)
         {
             routeVisualizationType = sceneController.routeVisualizationType;
             ClearCurrentWaypoints(routeVisualizationType);
             Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
-            
-            List<Vector3> waypointPositions = new List<Vector3>();
+
+            List<Vector2> tempLocationsList = new List<Vector2>();
+
+            bool clearStaleWaypoints = true;
+            while(locationsList.Count > OPENTOPODATA_QUEUE_SIZE)
+            {
+                tempLocationsList.AddRange(locationsList.GetRange(0, OPENTOPODATA_QUEUE_SIZE));
+                locationsList.RemoveRange(0, OPENTOPODATA_QUEUE_SIZE);
+                await PrepareWaypointBatchWithElevations(startLocation, tempLocationsList, clearStaleWaypoints);
+                clearStaleWaypoints = false;
+                tempLocationsList.Clear();
+            }
+
+            if(locationsList.Count > 0)
+            {
+                tempLocationsList.AddRange(locationsList);
+                await PrepareWaypointBatchWithElevations(startLocation, tempLocationsList, clearStaleWaypoints);
+            }
+        }
+
+        private async Task PrepareWaypointBatchWithElevations(Vector2 startLocation, List<Vector2> tempLocationsList, bool clearStaleWaypoints)
+        {
+            List<Vector3> currentWaypointPositions = new List<Vector3>();
             List<string> waypointNames = new List<string>();
-            
+
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
-                OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(locationsList);
+                OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(tempLocationsList);
                 foreach (var coord in elevationsResponse.results)
                 {
                     Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.latitude, (float)coord.longitude);
 
                     float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad() - 1f);
                     Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
-                    
-                    waypointPositions.Add(point);
+
+                    currentWaypointPositions.Add(point);
                     waypointNames.Add($"{coord.latitude},{coord.longitude}");
                 }
             }
             else
             {
-                OpenTopoDataResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenTopoDataQuery(locationsList, routeVisualizationType);
+                OpenTopoDataResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenTopoDataQuery(tempLocationsList, routeVisualizationType);
 
                 foreach (var coord in elevationsResponse.results)
                 {
@@ -116,18 +146,20 @@ namespace Assets.Scripts
                     float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
                     Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
 
-                    waypointPositions.Add(point);
+                    currentWaypointPositions.Add(point);
                     waypointNames.Add($"{coord.location.lat},{coord.location.lng}");
                 }
             }
 
-            VisualizeRoute(waypointPositions, waypointNames);
+            VisualizeRoute(currentWaypointPositions, waypointNames, clearStaleWaypoints);
         }
 
-        private void VisualizeRoute(List<Vector3> waypointPositions, List<string> waypointNames)
+        private void VisualizeRoute(List<Vector3> waypointPositions, List<string> waypointNames, bool clearStaleWaypoints = true)
         {
             routeVisualizationType = sceneController.routeVisualizationType;
-            ClearCurrentWaypoints(routeVisualizationType);
+            
+            if(clearStaleWaypoints)
+                ClearCurrentWaypoints(routeVisualizationType);
 
             Transform container;
 
