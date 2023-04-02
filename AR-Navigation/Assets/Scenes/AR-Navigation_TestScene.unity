@@ -316,6 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce084194819a2c64b961035165f9ec9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OPENTOPODATA_QUEUE_SIZE: 20
   scaleModifier: 100000
   routeVisualizationType: 0
   containerNoElevation: {fileID: 1831715454}
