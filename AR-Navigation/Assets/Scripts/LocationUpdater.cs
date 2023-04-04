@@ -47,7 +47,8 @@ namespace Assets.Scripts
                 i -= Time.deltaTime;
                 yield return null;
             }
-            //onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
+            lastLocationCompassData.isFirstUpdate = true;
+            onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
 
             // First, check if user has location service enabled
             if (!Input.location.isEnabledByUser)
@@ -105,6 +106,8 @@ namespace Assets.Scripts
 
                     lastLocationCompassData.timestamp = Input.location.lastData.timestamp;
 
+                    lastLocationCompassData.isFirstUpdate = false;
+
                     onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
                 }
                 timeForNextUpdate = Time.time + updateInterval;
@@ -130,6 +133,7 @@ namespace Assets.Scripts
         public double timestamp;
         public LocationData location;
         public CompassData compass;
+        public bool isFirstUpdate;
 
         public LocationCompassData()
         {
@@ -141,6 +145,8 @@ namespace Assets.Scripts
             compass.magneticHeading = 72f;
             compass.trueHeading = 72f;
             compass.rawVector = Vector3.one;
+
+            isFirstUpdate = false;
         }
     }
 

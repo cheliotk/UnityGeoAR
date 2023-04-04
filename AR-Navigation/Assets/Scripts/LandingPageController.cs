@@ -59,6 +59,9 @@ namespace Assets.Scripts
 
         private void Instance_onLocationCompassDataUpdatedEvent(object sender, LocationCompassData e)
         {
+            if (e.isFirstUpdate)
+                return;
+
             startAppButton.GetComponentInChildren<Text>().text = "Start application";
             startAppButton.interactable = true;
         }
