@@ -22,8 +22,15 @@ namespace Assets.Scripts
                 return;
             }
 
+            Application.logMessageReceived += Application_logMessageReceived;
+
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
+        }
+
+        private void Application_logMessageReceived(string condition, string stackTrace, LogType type)
+        {
+            Debug.Log($"{type} : {stackTrace}");
         }
 
         //private void Start()
@@ -40,7 +47,7 @@ namespace Assets.Scripts
                 i -= Time.deltaTime;
                 yield return null;
             }
-            onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
+            //onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
 
             // First, check if user has location service enabled
             if (!Input.location.isEnabledByUser)

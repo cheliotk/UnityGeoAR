@@ -10,7 +10,6 @@ namespace Assets.Scripts
     {
         [SerializeField] Button startAppButton;
         [SerializeField] GameObject locationPermissionDeniedMessage;
-        [SerializeField] GameObject initializingMessage;
 
         private void Start()
         {
@@ -60,13 +59,13 @@ namespace Assets.Scripts
 
         private void Instance_onLocationCompassDataUpdatedEvent(object sender, LocationCompassData e)
         {
-            initializingMessage?.SetActive(false);
             startAppButton.GetComponentInChildren<Text>().text = "Start application";
             startAppButton.interactable = true;
         }
 
         public void LoadScene(int sceneIndex = 1)
         {
+            LocationUpdater.Instance.onLocationCompassDataUpdatedEvent -= Instance_onLocationCompassDataUpdatedEvent;
             SceneManager.LoadScene(sceneIndex);
         }
     }

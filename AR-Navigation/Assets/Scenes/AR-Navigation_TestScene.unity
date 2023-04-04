@@ -1042,6 +1042,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LocationUpdatesDebuggerPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 1505353684238880321, guid: 31d8f80149d8a9344aaf75f553ae7644, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1505353685021506204, guid: 31d8f80149d8a9344aaf75f553ae7644, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
