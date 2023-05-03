@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class LocationUpdater : MonoBehaviour
     {
+        private const int MAX_COMPASS_RECORDS = 10;
         public static LocationUpdater Instance { get; private set; }
         private bool isUpdating = true;
         [SerializeField] private float updateInterval = 1f;
 
         public event EventHandler<LocationCompassData> onLocationCompassDataUpdatedEvent;
         public LocationCompassData lastLocationCompassData { get; private set; } = new LocationCompassData();
+        
+        private readonly List<CompassData> latestCompassHeadings = new List<CompassData>();
 
         private void Awake()
         {
@@ -86,6 +91,12 @@ namespace Assets.Scripts
                     lastLocationCompassData.compass.trueHeading = Input.compass.trueHeading;
                     lastLocationCompassData.compass.rawVector = Input.compass.rawVector;
 
+                    latestCompassHeadings.Add(lastLocationCompassData.compass);
+                    if(latestCompassHeadings.Count > MAX_COMPASS_RECORDS)
+                    {
+                        latestCompassHeadings.RemoveAt(0);
+                    }
+
                     yield return null;
                 }
 
@@ -125,6 +136,34 @@ namespace Assets.Scripts
         {
             isUpdating = true;
             StartCoroutine(LocationUpdateCoroutine());
+        }
+
+        public float GetAverageMagneticHeading()
+        {
+            float[] angles = new float[latestCompassHeadings.Count];
+            for (int i = 0; i < latestCompassHeadings.Count; i++)
+            {
+                CompassData item = latestCompassHeadings[i];
+                angles[i] = item.magneticHeading;
+            }
+
+            var x = angles.Sum(a => Math.Cos(a * Math.PI / 180)) / angles.Length;
+            var y = angles.Sum(a => Math.Sin(a * Math.PI / 180)) / angles.Length;
+            return (float)(Math.Atan2(y, x) * 180 / Math.PI);
+        }
+
+        public float GetAverageTrueHeading()
+        {
+            float[] angles = new float[latestCompassHeadings.Count];
+            for (int i = 0; i < latestCompassHeadings.Count; i++)
+            {
+                CompassData item = latestCompassHeadings[i];
+                angles[i] = item.trueHeading;
+            }
+
+            var x = angles.Sum(a => Math.Cos(a * Math.PI / 180)) / angles.Length;
+            var y = angles.Sum(a => Math.Sin(a * Math.PI / 180)) / angles.Length;
+            return (float)(Math.Atan2(y, x) * 180 / Math.PI);
         }
     }
 

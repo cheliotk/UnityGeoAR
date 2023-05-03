@@ -11,8 +11,10 @@ namespace Assets.Scripts
 {
     public class ARSceneController : SceneControllerBase
     {
-        [SerializeField] GameObject AR_origin;
-        [SerializeField] TMP_Dropdown dropdown;
+        [SerializeField] private GameObject AR_origin;
+        [SerializeField] private TMP_Dropdown dropdown;
+
+        private float cameraAngleOffset = 0f;
 
         private void Start()
         {
@@ -52,7 +54,7 @@ namespace Assets.Scripts
         private async void SetStartValues()
         {
             LocationCompassData lastLocationData = LocationUpdater.Instance.lastLocationCompassData;
-            compassHeadingAtSceneLoad = lastLocationData.compass.trueHeading;
+            compassHeadingAtSceneLoad = LocationUpdater.Instance.GetAverageMagneticHeading();
             locationAtSceneLoad = ConvertLocationDataToVector2(lastLocationData.location);
             locationGGRS87AtSceneLoad = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87(locationAtSceneLoad.x, locationAtSceneLoad.y);
 
@@ -71,10 +73,16 @@ namespace Assets.Scripts
             SetCameraRotation();
         }
 
+        public void UpdateCameraRotation(float angle)
+        {
+            cameraAngleOffset = -angle;
+            SetCameraRotation();
+        }
+
         private void SetCameraRotation()
         {
             Vector3 rot = AR_origin.transform.rotation.eulerAngles;
-            rot.y = compassHeadingAtSceneLoad;
+            rot.y = compassHeadingAtSceneLoad + cameraAngleOffset;
             AR_origin.transform.rotation = Quaternion.Euler(rot);
 
         }
