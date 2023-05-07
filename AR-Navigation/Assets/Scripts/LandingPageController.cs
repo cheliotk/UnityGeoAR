@@ -9,6 +9,7 @@ namespace Assets.Scripts
     public class LandingPageController : MonoBehaviour
     {
         [SerializeField] Button startAppButton;
+        [SerializeField] Toggle usePresetRoutesToggle;
         [SerializeField] GameObject locationPermissionDeniedMessage;
 
         private void Start()
@@ -70,6 +71,15 @@ namespace Assets.Scripts
         {
             LocationUpdater.Instance.onLocationCompassDataUpdatedEvent -= Instance_onLocationCompassDataUpdatedEvent;
             SceneManager.LoadScene(sceneIndex);
+        }
+
+        public void LoadScene()
+        {
+            int sceneIndex = 1;
+            if(usePresetRoutesToggle.isOn)
+                sceneIndex = 2;
+
+            LoadScene(sceneIndex);
         }
     }
 }

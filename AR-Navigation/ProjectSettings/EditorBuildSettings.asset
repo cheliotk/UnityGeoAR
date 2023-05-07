@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AR-Navigation_TestScene.unity
     guid: 9f4cfdaa30e124141b3b70f4e594d779
+  - enabled: 1
+    path: Assets/Scenes/AR-Navigation_PresetRoutes.unity
+    guid: 8ef6948127e41044a9be8871036958ae
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 95cc5c4c836a3b4449f0829dfb973e04, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6d424e165bcd799428a8b649afb7270c, type: 2}
