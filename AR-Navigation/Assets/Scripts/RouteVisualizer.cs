@@ -90,7 +90,7 @@ namespace Assets.Scripts
             }
         }
 
-        private async Task PrepareWaypointsWithElevations(List<Vector2> locationsList)
+        public async Task PrepareWaypointsWithElevations(List<Vector2> locationsList)
         {
             routeVisualizationType = sceneController.routeVisualizationType;
             ClearCurrentWaypoints(routeVisualizationType);
