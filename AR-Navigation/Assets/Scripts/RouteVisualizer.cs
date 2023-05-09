@@ -191,16 +191,18 @@ namespace Assets.Scripts
                 string waypointName = $"Waypoint:{waypointNames[i]}";
                 VisualizeWaypoint(container, waypointPosition, waypointName);
 
-                GameObject line = Instantiate(linePrefab, waypointPosition, Quaternion.Euler(Vector3.right * 90f), lineContainer);
+                GameObject line = Instantiate(linePrefab, waypointPosition, Quaternion.Euler(Vector3.zero));
+                line.transform.SetParent(lineContainer.transform, false);
                 LineRenderer lren = line.GetComponent<LineRenderer>();
                 lren.positionCount = 2;
-                lren.SetPositions(new Vector3[] { waypointPosition, waypointPositions[i - 1] });
+                lren.SetPositions(new Vector3[] { Vector3.zero, waypointPositions[i - 1] - waypointPosition });
             }
         }
 
         private void VisualizeWaypoint(Transform container, Vector3 waypointPosition, string waypointName)
         {
-            GameObject waypoint = Instantiate(waypointPrefab, waypointPosition, Quaternion.identity, container);
+            GameObject waypoint = Instantiate(waypointPrefab, waypointPosition, Quaternion.identity);
+            waypoint.transform.SetParent(container, false);
             waypoint.name = waypointName;
         }
 
