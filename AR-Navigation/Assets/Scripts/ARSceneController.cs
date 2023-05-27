@@ -13,13 +13,23 @@ namespace Assets.Scripts
     {
         [SerializeField] private GameObject AR_origin;
         [SerializeField] private TMP_Dropdown dropdown;
+        [SerializeField] private Transform noElevationContainer;
 
         private float cameraAngleOffset = 0f;
+        private Transform arCamera;
 
         private void Start()
         {
             SetStartValues();
             SetupDropdown();
+            arCamera = AR_origin.transform.GetChild(0);
+        }
+
+        private void Update()
+        {
+            Vector3 pathContainerPos = noElevationContainer.position;
+            pathContainerPos.y = arCamera.transform.position.y - 1f;
+            noElevationContainer.position = pathContainerPos;
         }
 
         private void SetupDropdown()

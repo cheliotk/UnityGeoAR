@@ -186,7 +186,7 @@ RectTransform:
   - {fileID: 1044701580}
   - {fileID: 922733096}
   m_Father: {fileID: 1572826488}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -297,10 +297,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28383f41c76be8c4fb42de3bb4065f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _routeVisualizationType: 3
+  _routeVisualizationType: 0
   locationAtSceneLoad: {x: 0, y: 0}
   AR_origin: {fileID: 1948022999}
   dropdown: {fileID: 1329163098}
+  noElevationContainer: {fileID: 1831715454}
 --- !u!4 &417367216
 Transform:
   m_ObjectHideFlags: 0
@@ -356,7 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OPENTOPODATA_QUEUE_SIZE: 20
-  routeVisualizationType: 3
+  routeVisualizationType: 0
   containerNoElevation: {fileID: 1831715454}
   containerOpenElevation: {fileID: 29176996}
   containerOpenTopoData_ASTER: {fileID: 2080108486}
@@ -1621,9 +1622,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 481297897}
+  - {fileID: 287072269}
   - {fileID: 366081001}
   - {fileID: 1329163097}
-  - {fileID: 287072269}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

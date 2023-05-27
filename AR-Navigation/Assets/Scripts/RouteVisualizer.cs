@@ -208,27 +208,42 @@ namespace Assets.Scripts
 
         private void ClearCurrentWaypoints(RouteVisualizationType routeVisualizationType)
         {
-            Transform container;
-            switch (routeVisualizationType)
+            //Transform container;
+            //switch (routeVisualizationType)
+            //{
+            //    case RouteVisualizationType.NO_ELEVATION:
+            //        container = containerNoElevation;
+            //        break;
+            //    case RouteVisualizationType.ELEVATION_OPEN_ELEVATION:
+            //        container = containerOpenElevation;
+            //        break;
+            //    case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM:
+            //        container = containerOpenTopoData_EUDEM;
+            //        break;
+            //    case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER:
+            //        container = containerOpenTopoData_ASTER;
+            //        break;
+            //    default:
+            //        container = containerNoElevation;
+            //        break;
+            //}
+
+            foreach (Transform child in containerNoElevation.transform)
             {
-                case RouteVisualizationType.NO_ELEVATION:
-                    container = containerNoElevation;
-                    break;
-                case RouteVisualizationType.ELEVATION_OPEN_ELEVATION:
-                    container = containerOpenElevation;
-                    break;
-                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM:
-                    container = containerOpenTopoData_EUDEM;
-                    break;
-                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER:
-                    container = containerOpenTopoData_ASTER;
-                    break;
-                default:
-                    container = containerNoElevation;
-                    break;
+                Destroy(child.gameObject);
             }
 
-            foreach (Transform child in container.transform)
+            foreach (Transform child in containerOpenElevation.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach (Transform child in containerOpenTopoData_EUDEM.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach (Transform child in containerOpenTopoData_ASTER.transform)
             {
                 Destroy(child.gameObject);
             }
