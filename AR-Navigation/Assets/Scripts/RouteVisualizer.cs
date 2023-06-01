@@ -39,6 +39,33 @@ namespace Assets.Scripts
                 routingHandler.onRouteReceived -= RoutingHandler_onRouteReceived;
         }
 
+        public async void HandlePresetRoute(List<Vector2> route, List<string> waypointNames)
+        {
+            try
+            {
+                if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
+                {
+                    await PrepareWaypointsWithElevations(route);
+                }
+                else
+                {
+                    List<Vector3> waypoints = new List<Vector3>();
+                    foreach (Vector2 coord in route)
+                    {
+                        Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
+                        Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.y, (float)coord.x);
+                        Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
+                        waypoints.Add(point);
+                    }
+                    VisualizeRoute(waypoints, waypointNames);
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
         private async void RoutingHandler_onRouteReceived(object sender, OpenRouteServiceResponse response)
         {
             try

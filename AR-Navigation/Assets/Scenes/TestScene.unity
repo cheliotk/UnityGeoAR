@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OPENTOPODATA_QUEUE_SIZE: 20
-  routeVisualizationType: 1
+  routeVisualizationType: 0
   containerNoElevation: {fileID: 936428981}
   containerOpenElevation: {fileID: 1172230362}
   containerOpenTopoData_ASTER: {fileID: 1036507536}
@@ -869,7 +869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6011593524655010998, guid: b6144c875ed02a64bb2a1dcb45b01ee6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6144c875ed02a64bb2a1dcb45b01ee6, type: 3}

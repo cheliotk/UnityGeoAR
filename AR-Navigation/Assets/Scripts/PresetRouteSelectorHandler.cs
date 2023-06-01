@@ -2,6 +2,7 @@ using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -78,15 +79,17 @@ public class PresetRouteSelectorHandler : MonoBehaviour
         for (int i = 0; i < routeFiles.Count; i++)
         {
             TextAsset routeFile = routeFiles[i];
-            List<Vector2> route = ParseRouteFile(routeFile);
-            PresetRoute presetRoute = new PresetRoute(routeFile.name, i, route);
+            List<string> waypointNames;
+            List<Vector2> route = ParseRouteFile(routeFile, out waypointNames);
+            PresetRoute presetRoute = new PresetRoute(routeFile.name, i, route, waypointNames);
             routesDict.Add(i, presetRoute);
         }
     }
 
-    private List<Vector2> ParseRouteFile(TextAsset routeFile)
+    private List<Vector2> ParseRouteFile(TextAsset routeFile, out List<string> waypointNames)
     {
         List<Vector2> route = new List<Vector2>();
+        waypointNames = new List<string>();
 
         string[] lines = routeFile.text.Split("\n");
         for (int i = 1; i < lines.Length; i++)
@@ -96,7 +99,9 @@ public class PresetRouteSelectorHandler : MonoBehaviour
             float x, y;
             if (float.TryParse(coors[0], out x) && float.TryParse(coors[1], out y))
             {
-                route.Add(new Vector2(x, y));
+                Vector2 coordinatePair = new Vector2(x, y);
+                waypointNames.Add($"{x},{y}");
+                route.Add(coordinatePair);
             }
         }
 
@@ -123,7 +128,7 @@ public class PresetRouteSelectorHandler : MonoBehaviour
     {
         PresetRouteEntry entry = sender as PresetRouteEntry;
         List<Vector2> route = routesDict[entry.index].waypoints;
-        await routeVisualizer.PrepareWaypointsWithElevations(route);
+        routeVisualizer.HandlePresetRoute(routesDict[entry.index].waypoints, routesDict[entry.index].waypointNames);
     }
 }
 
@@ -132,11 +137,13 @@ public class PresetRoute
     public string name { get; private set; }
     public int index { get; private set; }
     public List<Vector2> waypoints { get; private set; }
+    public List<string> waypointNames { get; private set; }
 
-    public PresetRoute(string name, int index, List<Vector2> waypoints)
+    public PresetRoute(string name, int index, List<Vector2> waypoints, List<string> waypointNames)
     {
         this.name = name;
         this.index = index;
         this.waypoints = waypoints;
+        this.waypointNames = waypointNames;
     }
 }
