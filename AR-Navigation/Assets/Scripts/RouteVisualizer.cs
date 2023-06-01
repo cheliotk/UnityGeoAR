@@ -149,6 +149,7 @@ namespace Assets.Scripts
 
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
+                return;
                 OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(tempLocationsList);
                 foreach (var coord in elevationsResponse.results)
                 {
