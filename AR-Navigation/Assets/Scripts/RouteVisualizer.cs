@@ -213,17 +213,19 @@ namespace Assets.Scripts
             lineContainer.SetParent(container);
             lineContainer.localPosition = Vector3.zero;
 
+            GameObject line = Instantiate(linePrefab, waypointPositions[0], Quaternion.Euler(Vector3.zero));
+            line.transform.SetParent(lineContainer.transform, false);
+            LineRenderer lren = line.GetComponent<LineRenderer>();
+            lren.positionCount = waypointPositions.Count;
+
+            lren.SetPosition(0, Vector3.zero);
+
             for (int i = 1; i < waypointPositions.Count; i++)
             {
                 Vector3 waypointPosition = waypointPositions[i];
                 string waypointName = $"Waypoint:{waypointNames[i]}";
                 VisualizeWaypoint(container, waypointPosition, waypointName);
-
-                GameObject line = Instantiate(linePrefab, waypointPosition, Quaternion.Euler(Vector3.zero));
-                line.transform.SetParent(lineContainer.transform, false);
-                LineRenderer lren = line.GetComponent<LineRenderer>();
-                lren.positionCount = 2;
-                lren.SetPositions(new Vector3[] { Vector3.zero, waypointPositions[i - 1] - waypointPosition });
+                lren.SetPosition(i, waypointPosition - waypointPositions[0]);
             }
         }
 
