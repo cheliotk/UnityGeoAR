@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OPENTOPODATA_QUEUE_SIZE: 20
-  routeVisualizationType: 0
+  routeVisualizationType: 2
   containerNoElevation: {fileID: 936428981}
   containerOpenElevation: {fileID: 1172230362}
   containerOpenTopoData_ASTER: {fileID: 1036507536}
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d060096b9443f6d4092fe6e471cbc1ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _routeVisualizationType: 0
+  _routeVisualizationType: 2
   locationAtSceneLoad: {x: 38.014053, y: 23.741268}
 --- !u!4 &803423260
 Transform:
