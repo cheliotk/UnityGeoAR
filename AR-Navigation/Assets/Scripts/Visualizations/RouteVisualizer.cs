@@ -1,10 +1,7 @@
 ﻿using Assets.Scripts.Auxiliary;
 using Assets.Scripts.Models;
 using Assets.Scripts.Services;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -45,7 +42,7 @@ namespace Assets.Scripts
                 routingService.onRouteReceived -= RoutingHandler_onRouteReceived;
         }
 
-        public async void HandlePresetRoute(List<Vector2> route, List<string> waypointNames)
+        public async Task HandlePresetRoute(List<Vector2> route, List<string> waypointNames)
         {
             try
             {
@@ -155,6 +152,7 @@ namespace Assets.Scripts
 
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
+                // OPEN_ELEVATION no longer supported
                 return;
                 OpenElevationResponse elevationsResponse = await elevationQueryService.MakeOpenElevationQuery(tempLocationsList);
                 foreach (var coord in elevationsResponse.results)
@@ -244,26 +242,6 @@ namespace Assets.Scripts
 
         private void ClearCurrentWaypoints(RouteVisualizationType routeVisualizationType)
         {
-            //Transform container;
-            //switch (routeVisualizationType)
-            //{
-            //    case RouteVisualizationType.NO_ELEVATION:
-            //        container = containerNoElevation;
-            //        break;
-            //    case RouteVisualizationType.ELEVATION_OPEN_ELEVATION:
-            //        container = containerOpenElevation;
-            //        break;
-            //    case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM:
-            //        container = containerOpenTopoData_EUDEM;
-            //        break;
-            //    case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER:
-            //        container = containerOpenTopoData_ASTER;
-            //        break;
-            //    default:
-            //        container = containerNoElevation;
-            //        break;
-            //}
-
             foreach (Transform child in containerNoElevation.transform)
             {
                 Destroy(child.gameObject);

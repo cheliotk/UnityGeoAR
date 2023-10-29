@@ -13,6 +13,4 @@ namespace Assets.Scripts.Models
     {
         public List<OpenElevationResult> results { get; set; }
     }
-
-
 }

@@ -20,6 +20,4 @@ namespace Assets.Scripts.Models
         public List<OpenTopoDataResult> results { get; set; }
         public string status { get; set; }
     }
-
-
 }

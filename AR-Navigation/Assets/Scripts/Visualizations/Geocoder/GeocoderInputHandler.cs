@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Services;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 

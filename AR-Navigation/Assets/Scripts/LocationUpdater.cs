@@ -105,8 +105,6 @@ namespace Assets.Scripts
                 else
                 {
                     // Access granted and location value could be retrieved
-                    //Debug.Log("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
-
                     lastLocationCompassData.location.latitude = Input.location.lastData.latitude;
                     lastLocationCompassData.location.longitude = Input.location.lastData.longitude;
                     lastLocationCompassData.location.altitude = Input.location.lastData.altitude;
@@ -123,8 +121,6 @@ namespace Assets.Scripts
 
             // Stop service if there is no need to query location updates continuously
             Input.location.Stop();
-
-            //SetUIText("FINISHING COROUTINE");
         }
 
         public void StopLocationUpdates() => isUpdating = false;

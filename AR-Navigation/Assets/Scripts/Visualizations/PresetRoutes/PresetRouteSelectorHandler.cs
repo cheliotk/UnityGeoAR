@@ -1,8 +1,6 @@
 using Assets.Scripts;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +19,6 @@ public class PresetRouteSelectorHandler : MonoBehaviour
     private bool isExpanded = false;
     private RectTransform expandButtonGraphicTransform;
 
-    // Start is called before the first frame update
     void Start()
     {
         routeVisualizer = GameObject.FindObjectOfType<RouteVisualizer>();
@@ -127,11 +124,18 @@ public class PresetRouteSelectorHandler : MonoBehaviour
         }
     }
 
-    private async void PresetRouteEntry_onEntryClicked(object sender, System.EventArgs e)
+    private async void PresetRouteEntry_onEntryClicked(object sender, EventArgs e)
     {
-        PresetRouteEntry entry = sender as PresetRouteEntry;
-        List<Vector2> route = routesDict[entry.index].waypoints;
-        routeVisualizer.HandlePresetRoute(routesDict[entry.index].waypoints, routesDict[entry.index].waypointNames);
+        try
+        {
+            PresetRouteEntry entry = sender as PresetRouteEntry;
+            List<Vector2> route = routesDict[entry.index].waypoints;
+            await routeVisualizer.HandlePresetRoute(routesDict[entry.index].waypoints, routesDict[entry.index].waypointNames);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }
 

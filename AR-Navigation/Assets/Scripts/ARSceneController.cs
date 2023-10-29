@@ -79,9 +79,6 @@ namespace Assets.Scripts
             var resEUDEM = await ElevationQueryService.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM);
             elevationOpenTopoData_EUDEM = resEUDEM.results[0].elevation+1;
 
-            //var res = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(locations);
-            //elevationOpenElevation = res.results[0].elevation + 1;
-
             SetCameraRotation();
         }
 

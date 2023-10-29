@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Models.Nominatim;
 using Assets.Scripts.Services;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,17 +63,9 @@ namespace Assets.Scripts
 
         private void ClearChildren()
         {
-            //foreach (GeocoderResultEntry entry in entries)
-            //{
-            //    Destroy(entry.gameObject);
-            //}
-            //entries.Clear();
-
             for (int i = 0; i < container.childCount; i++)
             {
                 RemoveChild(container.GetChild(i).GetComponent<GeocoderResultEntry>());
-                //Transform child = container.GetChild(i);
-                //Destroy(child.gameObject);
             }
         }
     }

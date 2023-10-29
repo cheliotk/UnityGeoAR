@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Models.Nominatim;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +16,6 @@ namespace Assets.Scripts
         private bool isExpanded = false;
         private RectTransform expandButtonGraphicTransform;
 
-        // Use this for initialization
         void Start()
         {
             if (expandButton != null)

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -48,7 +49,6 @@ namespace Assets.Scripts.Services
             try
             {
                 var baseAddress = new Uri($"{directionsApiBase}/{directionsProfile}?api_key={openRouteServiceApiKey}&start={originLatLong.y},{originLatLong.x}&end={destinationLatLong.y},{destinationLatLong.x}");
-                //Debug.Log($"route request: {baseAddress}");
                 using (var httpClient = new HttpClient { BaseAddress = baseAddress })
                 {
                     httpClient.DefaultRequestHeaders.Clear();
@@ -56,21 +56,17 @@ namespace Assets.Scripts.Services
 
                     using (var response = await httpClient.GetAsync(baseAddress))
                     {
-                        //Debug.Log($"1: {response}");
                         string responseData = await response.Content.ReadAsStringAsync();
-                        //Debug.Log($"2: {responseData}");
 
                         if (response.IsSuccessStatusCode)
                         {
                             OpenRouteServiceResponse route = JsonConvert.DeserializeObject<OpenRouteServiceResponse>(responseData);
-                            //Debug.Log($"3: route with {route.features.Count} features");
                             onRouteReceived?.Invoke(this, route);
                         }
                         else
                         {
                             string exceptionMessage = $"routing request το {directionsApiBase} failed with response {response}";
-                            Debug.LogWarning(exceptionMessage);
-                            throw new Exception(exceptionMessage);
+                            throw new ExternalException(exceptionMessage);
                         }
                     }
                 }

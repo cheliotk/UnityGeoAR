@@ -1,5 +1,4 @@
 ﻿using DotSpatial.Projections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Auxiliary
