@@ -26,13 +26,15 @@ namespace Assets.Scripts
         private SceneControllerBase sceneController;
         private RoutingService routingService;
         private ReprojectionService reprojectionService;
+        private ElevationQueryService elevationQueryService;
 
         private void Start()
         {
             reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
             sceneController = FindObjectOfType<SceneControllerBase>();
 
-            routingService = sceneController.GetRoutingService();
+            elevationQueryService = sceneController.ElevationQueryService;
+            routingService = sceneController.RoutingService;
             if (routingService != null)
                 routingService.onRouteReceived += RoutingHandler_onRouteReceived;
         }
@@ -154,7 +156,7 @@ namespace Assets.Scripts
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
                 return;
-                OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(tempLocationsList);
+                OpenElevationResponse elevationsResponse = await elevationQueryService.MakeOpenElevationQuery(tempLocationsList);
                 foreach (var coord in elevationsResponse.results)
                 {
                     Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord.latitude, coord.longitude);
@@ -168,7 +170,7 @@ namespace Assets.Scripts
             }
             else
             {
-                OpenTopoDataResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenTopoDataQuery(tempLocationsList, routeVisualizationType);
+                OpenTopoDataResponse elevationsResponse = await elevationQueryService.MakeOpenTopoDataQuery(tempLocationsList, routeVisualizationType);
 
                 foreach (var coord in elevationsResponse.results)
                 {

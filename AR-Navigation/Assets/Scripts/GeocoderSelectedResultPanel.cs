@@ -19,7 +19,7 @@ namespace Assets.Scripts
         {
             sceneController = FindObjectOfType<SceneControllerBase>();
 
-            routingService = sceneController.GetRoutingService();
+            routingService = sceneController.RoutingService;
         }
 
         public void SetSelectedFeature(Feature feature)

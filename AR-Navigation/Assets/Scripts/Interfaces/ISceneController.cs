@@ -10,6 +10,5 @@ namespace Assets.Scripts.Interfaces
         Vector2 GetPositionGGRS87AtSceneLoad();
         float GetElevationAtSceneLoad();
         float GetCompassHeadingAtSceneLoad();
-        RoutingService GetRoutingService();
     }
 }

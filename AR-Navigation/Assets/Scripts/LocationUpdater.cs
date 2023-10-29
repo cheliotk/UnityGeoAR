@@ -39,11 +39,6 @@ namespace Assets.Scripts
             Debug.Log($"{type} : {stackTrace}");
         }
 
-        //private void Start()
-        //{
-        //    StartLocationUpdates();
-        //}
-
         IEnumerator LocationUpdateCoroutine()
         {
             Debug.Log("Starting Location Updates");

@@ -6,28 +6,16 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Services
 {
-    public class ElevationQueryHandler : MonoBehaviour
+    public class ElevationQueryService
     {
-        public static ElevationQueryHandler Instance { get; private set; }
-
         private const string OPEN_ELEVATION_API_BASE_GET = "https://api.open-elevation.com/api/v1/lookup?";
-        private string temp = "https://api.opentopodata.org/v1/aster30m?locations=39.747114,-104.996334";
         private const string OPENTOPODATA_API_BASE_GET = "https://api.opentopodata.org/v1/";
         private const string OPENTOPODATA_DATASET_ASTER = "aster30m?";
         private const string OPENTOPODATA_DATASET_EUDEM = "eudem25m?";
 
         private float lastOpenTopoDataCall = -1f;
-
-        private void Awake()
-        {
-            var instances = FindObjectsOfType<ElevationQueryHandler>();
-            if (instances.Length > 1)
-                Destroy(this.gameObject);
-
-            Instance = this;
-        }
 
         public async Task<OpenElevationResponse> MakeOpenElevationQuery(List<Vector2> locations)
         {
@@ -60,12 +48,12 @@ namespace Assets.Scripts
         {
             if (routeVisualizationType != RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM && routeVisualizationType != RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER)
                 throw new Exception($"Wrong Dataset requested: Expecting OpenTopoData, got {routeVisualizationType}");
-            
+
             string locationsString = ConstructLocationsListStringFromVector2Array(locations);
 
             string dataset = routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM ? OPENTOPODATA_DATASET_EUDEM : OPENTOPODATA_DATASET_ASTER;
             string query = $"{OPENTOPODATA_API_BASE_GET}{dataset}locations={locationsString}";
-            
+
             var baseAddress = new Uri(query);
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {

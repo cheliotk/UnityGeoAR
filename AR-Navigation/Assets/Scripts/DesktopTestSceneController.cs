@@ -30,10 +30,10 @@ namespace Assets.Scripts
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };
 
-            var resASTER = await ElevationQueryHandler.Instance.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER);
+            var resASTER = await ElevationQueryService.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER);
             elevationOpenTopoData_ASTER = resASTER.results[0].elevation;
 
-            var resEUDEM = await ElevationQueryHandler.Instance.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM);
+            var resEUDEM = await ElevationQueryService.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM);
             elevationOpenTopoData_EUDEM = resEUDEM.results[0].elevation;
 
             //var res = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(locations);
@@ -43,7 +43,7 @@ namespace Assets.Scripts
         [ContextMenu("Make Default Query")]
         public void MakeRoutingQuery()
         {
-            routingService.StartQuery(startLatLong, endLatLong);
+            RoutingService.StartQuery(startLatLong, endLatLong);
         }
 
         public override Vector2 GetCurrentLocation()

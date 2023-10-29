@@ -275,7 +275,6 @@ GameObject:
   - component: {fileID: 417367216}
   - component: {fileID: 417367215}
   - component: {fileID: 417367219}
-  - component: {fileID: 417367220}
   m_Layer: 0
   m_Name: SceneController
   m_TagString: Untagged
@@ -336,18 +335,6 @@ MonoBehaviour:
   containerOpenTopoData_EUDEM: {fileID: 387295678}
   waypointPrefab: {fileID: 1551917230273551044, guid: ea64ac07443aca044b321ca87edb848b, type: 3}
   linePrefab: {fileID: 2228299255252102848, guid: 03c61d3657ae1a747a658ac1ac721c6c, type: 3}
---- !u!114 &417367220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 417367214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d53ef9984b82462489a0459f29707c56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &481297896
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,7 +15,37 @@ namespace Assets.Scripts
         protected float elevationOpenTopoData_EUDEM;
         protected float elevationOpenTopoData_ASTER;
         protected float compassHeadingAtSceneLoad;
-        protected RoutingService routingService;
+
+        private RoutingService _routingService;
+        public RoutingService RoutingService
+        {
+            get
+            {
+                if(_routingService == null)
+                {
+                    _routingService = new RoutingService(apiKeyContainer.OpenRouteServiceApiKey,
+                        RoutingService.OpenRouteServiceDirectionsApiBase,
+                        RoutingService.OpenRouteServiceDirectionProfileWalking);
+                }
+
+                return _routingService;
+            }
+        }
+
+        private ElevationQueryService _elevationQueryService;
+        public ElevationQueryService ElevationQueryService
+        {
+            get
+            {
+                if(_elevationQueryService == null)
+                {
+                    _elevationQueryService = new ElevationQueryService();
+                }
+
+                return _elevationQueryService;
+            }
+        }
+
 
         public RouteVisualizationType routeVisualizationType
         {
@@ -24,18 +54,6 @@ namespace Assets.Scripts
                 return _routeVisualizationType;
             }
             set { }
-        }
-
-        public RoutingService GetRoutingService()
-        {
-            if(routingService == null)
-            {
-                routingService = new RoutingService(apiKeyContainer.OpenRouteServiceApiKey,
-                    RoutingService.OpenRouteServiceDirectionsApiBase,
-                    RoutingService.OpenRouteServiceDirectionProfileWalking);
-            }
-
-            return routingService;
         }
 
         public float GetElevationAtSceneLoad()
