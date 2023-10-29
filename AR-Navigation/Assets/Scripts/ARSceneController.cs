@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Auxiliary;
+using Assets.Scripts.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,8 +19,11 @@ namespace Assets.Scripts
         private float cameraAngleOffset = 0f;
         private Transform arCamera;
 
+        private ReprojectionService reprojectionService;
+
         private void Start()
         {
+            reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
             SetStartValues();
             SetupDropdown();
             arCamera = AR_origin.transform.GetChild(0);
@@ -66,7 +70,7 @@ namespace Assets.Scripts
             LocationCompassData lastLocationData = LocationUpdater.Instance.lastLocationCompassData;
             compassHeadingAtSceneLoad = LocationUpdater.Instance.GetAverageMagneticHeading();
             locationAtSceneLoad = ConvertLocationDataToVector2(lastLocationData.location);
-            locationGGRS87AtSceneLoad = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87(locationAtSceneLoad.x, locationAtSceneLoad.y);
+            locationGGRS87AtSceneLoad = reprojectionService.ReprojectPoint(locationAtSceneLoad.x, locationAtSceneLoad.y);
 
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };

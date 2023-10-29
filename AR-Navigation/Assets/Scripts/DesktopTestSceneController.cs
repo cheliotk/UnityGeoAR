@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Auxiliary;
+using Assets.Scripts.Services;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,10 @@ namespace Assets.Scripts
 {
     public class DesktopTestSceneController : SceneControllerBase
     {
+        ReprojectionService reprojectionService;
         private void Start()
         {
+            reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
             SetDefaultValues();
         }
 
@@ -19,7 +22,7 @@ namespace Assets.Scripts
                 locationAtSceneLoad = new Vector2(37.975321f, 23.780022f);
             }
 
-            locationGGRS87AtSceneLoad = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87(locationAtSceneLoad.x, locationAtSceneLoad.y);
+            locationGGRS87AtSceneLoad = reprojectionService.ReprojectPoint(locationAtSceneLoad.x, locationAtSceneLoad.y);
 
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };

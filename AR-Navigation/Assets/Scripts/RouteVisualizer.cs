@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Auxiliary;
 using Assets.Scripts.Auxiliary.OSR;
+using Assets.Scripts.Services;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,9 +25,11 @@ namespace Assets.Scripts
         private RoutingHandler routingHandler;
 
         private SceneControllerBase sceneController;
+        private ReprojectionService reprojectionService;
 
         private void Start()
         {
+            reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
             sceneController = FindObjectOfType<SceneControllerBase>();
             routingHandler = RoutingHandler.Instance;
             if (routingHandler != null)
@@ -53,7 +56,7 @@ namespace Assets.Scripts
                     foreach (Vector2 coord in route)
                     {
                         Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
-                        Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.y, (float)coord.x);
+                        Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord.y, coord.x);
                         Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
                         waypoints.Add(point);
                     }
@@ -92,7 +95,7 @@ namespace Assets.Scripts
                             }
                             else
                             {
-                                Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord[1], (float)coord[0]);
+                                Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord[1], coord[0]);
                                 Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
                             
                                 waypointPositions.Add(point);
@@ -153,7 +156,7 @@ namespace Assets.Scripts
                 OpenElevationResponse elevationsResponse = await ElevationQueryHandler.Instance.MakeOpenElevationQuery(tempLocationsList);
                 foreach (var coord in elevationsResponse.results)
                 {
-                    Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.latitude, (float)coord.longitude);
+                    Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord.latitude, coord.longitude);
 
                     float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad() - 1f);
                     Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
@@ -168,7 +171,7 @@ namespace Assets.Scripts
 
                 foreach (var coord in elevationsResponse.results)
                 {
-                    Vector2 point_GGRS87 = ProjectionUtilities.ReprojectFrom_WGS84_To_GGRS87((float)coord.location.lat, (float)coord.location.lng);
+                    Vector2 point_GGRS87 = reprojectionService.ReprojectPoint((float)coord.location.lat, (float)coord.location.lng);
 
                     float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
                     Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);

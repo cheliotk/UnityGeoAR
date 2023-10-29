@@ -1,19 +1,24 @@
 ﻿using DotSpatial.Projections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Auxiliary
 {
     public class ProjectionUtilities
     {
-        public static Vector2 ReprojectFrom_WGS84_To_GGRS87(float lat, float lng)
-        {
-            return ReprojectFromToCoordinateSystem(lat, lng, 4326, 2100);
-        }
-
         public static Vector2 ReprojectFromToCoordinateSystem(double lat, double lng, int sourceCRSCode, int destinationCRSCode)
         {
             ProjectionInfo source = ProjectionInfo.FromEpsgCode(4326);
             ProjectionInfo destination = ProjectionInfo.FromEpsgCode(2100);
+            double[] latLongs = new double[] { lng, lat };
+            double[] heights = new double[] { 0 };
+            Reproject.ReprojectPoints(latLongs, heights, source, destination, 0, heights.Length);
+
+            return new Vector2((float)latLongs[0], (float)latLongs[1]);
+        }
+
+        public static Vector2 ReprojectFromToCoordinateSystem(double lat, double lng, ProjectionInfo source, ProjectionInfo destination)
+        {
             double[] latLongs = new double[] { lng, lat };
             double[] heights = new double[] { 0 };
             Reproject.ReprojectPoints(latLongs, heights, source, destination, 0, heights.Length);
@@ -42,5 +47,11 @@ namespace Assets.Scripts.Auxiliary
             }
             return results;
         }
+    }
+
+    public enum CommonCRS
+    {
+        GGRS87 = 2100,
+        WGS84 = 4326
     }
 }
