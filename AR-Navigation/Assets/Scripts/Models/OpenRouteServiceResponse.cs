@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Assets.Scripts.Auxiliary.OSR
+namespace Assets.Scripts.Models
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Engine
     {
         public string version { get; set; }

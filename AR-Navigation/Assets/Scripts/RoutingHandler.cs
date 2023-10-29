@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Auxiliary;
-using Assets.Scripts.Auxiliary.OSR;
+using Assets.Scripts.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections;

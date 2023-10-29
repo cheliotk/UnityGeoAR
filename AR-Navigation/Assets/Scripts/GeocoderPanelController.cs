@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Models.Nominatim;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,7 +48,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void ResultsVisualizer_onEntrySelected(object sender, Auxiliary.Nominatim.Feature e)
+        private void ResultsVisualizer_onEntrySelected(object sender, Feature e)
         {
             if (selectedResultPanel.selectedFeature != e)
                 selectedResultPanel.SetSelectedFeature(e);

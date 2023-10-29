@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Auxiliary.Nominatim;
+﻿using Assets.Scripts.Models.Nominatim;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;

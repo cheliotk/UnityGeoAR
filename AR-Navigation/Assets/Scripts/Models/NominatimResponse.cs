@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-namespace Assets.Scripts.Auxiliary.Nominatim
+namespace Assets.Scripts.Models.Nominatim
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Feature
     {
         public string type { get; set; }

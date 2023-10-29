@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Auxiliary;
+﻿using Assets.Scripts.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

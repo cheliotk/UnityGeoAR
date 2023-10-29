@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Auxiliary;
-using Assets.Scripts.Auxiliary.OSR;
+using Assets.Scripts.Models;
 using Assets.Scripts.Services;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Auxiliary.Nominatim;
+﻿using Assets.Scripts.Models.Nominatim;
 using System;
 using System.Collections;
 using System.Collections.Generic;
