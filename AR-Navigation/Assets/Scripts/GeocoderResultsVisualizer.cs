@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Models.Nominatim;
+using Assets.Scripts.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,11 +15,11 @@ namespace Assets.Scripts
 
         private readonly List<GeocoderResultEntry> entries = new List<GeocoderResultEntry>();
 
-        private Geocoder geocoder;
+        private GeocoderService geocoder;
 
         private void Start()
         {
-            geocoder = Geocoder.Instance;
+            geocoder = new GeocoderService(GeocoderService.NominatimGeocoderApiBase);
             if(geocoder != null)
                 geocoder.onGeocodeResultsReceived += Geocoder_onGeocodeResultsReceived;
         }

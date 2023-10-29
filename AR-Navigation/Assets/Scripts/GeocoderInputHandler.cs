@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Services;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -8,11 +9,11 @@ namespace Assets.Scripts
     {
         [SerializeField] private TMP_InputField inputField;
 
-        private Geocoder geocoder;
+        private GeocoderService geocoder;
 
         private void Start()
         {
-            geocoder = Geocoder.Instance;
+            geocoder = new GeocoderService(GeocoderService.NominatimGeocoderApiBase);
 
             if(inputField != null)
                 inputField.onSubmit.AddListener(MakeQuery);

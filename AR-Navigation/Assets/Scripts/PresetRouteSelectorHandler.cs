@@ -119,9 +119,12 @@ public class PresetRouteSelectorHandler : MonoBehaviour
 
     private void DestroyEntry(PresetRouteEntry entry)
     {
-        entry.onEntryClicked -= PresetRouteEntry_onEntryClicked;
-        entries.Remove(entry);
-        Destroy(entry.gameObject);
+        if(entry != null)
+        {
+            entry.onEntryClicked -= PresetRouteEntry_onEntryClicked;
+            entries.Remove(entry);
+            Destroy(entry.gameObject);
+        }
     }
 
     private async void PresetRouteEntry_onEntryClicked(object sender, System.EventArgs e)

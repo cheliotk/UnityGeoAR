@@ -229,7 +229,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 417367216}
-  - component: {fileID: 417367218}
   - component: {fileID: 417367217}
   - component: {fileID: 417367219}
   - component: {fileID: 417367220}
@@ -271,18 +270,6 @@ MonoBehaviour:
   startLatLong: {x: 38.01408, y: 23.74127}
   endLatLong: {x: 38.02369, y: 23.73612}
   apiKeyContainer: {fileID: 11400000, guid: a426b5ac0dc65dc4a9c974ad19e3b88b, type: 2}
---- !u!114 &417367218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 417367214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08fa658a46ef8ba44a8cdc874f5f617c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &417367219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce084194819a2c64b961035165f9ec9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleModifier: 100000
+  OPENTOPODATA_QUEUE_SIZE: 5
   routeVisualizationType: 1
   containerNoElevation: {fileID: 1831715454}
   containerOpenElevation: {fileID: 29176996}
@@ -336,6 +323,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1572826488}
     m_Modifications:
+    - target: {fileID: 9130335496918657335, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335496918657335, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335496918657335, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335496918657335, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335496918657335, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335496918657335, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9130335498227125121, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
       propertyPath: m_Name
       value: GeocoderPanel
@@ -422,6 +433,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9130335498227125122, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335498258055058, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335498258055058, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335498258055058, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335498258055058, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130335498258055058, guid: 20e76708118640a42a4dfc63ba9b0ee8, type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -705,7 +736,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
