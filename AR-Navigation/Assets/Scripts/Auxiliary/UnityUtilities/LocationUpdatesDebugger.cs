@@ -1,6 +1,5 @@
 using Assets.Scripts;
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

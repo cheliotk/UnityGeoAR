@@ -1,12 +1,10 @@
 ﻿using Assets.Scripts.Auxiliary;
+using Assets.Scripts.Models;
 using Assets.Scripts.Services;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR.ARFoundation;
 
 namespace Assets.Scripts
 {

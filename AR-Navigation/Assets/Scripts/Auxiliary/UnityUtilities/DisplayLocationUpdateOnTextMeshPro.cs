@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Models;
 using TMPro;
 using UnityEngine;
 

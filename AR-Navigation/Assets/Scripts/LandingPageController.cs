@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Models;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.SceneManagement;
