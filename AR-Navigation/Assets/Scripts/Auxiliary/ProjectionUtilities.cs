@@ -1,5 +1,4 @@
 ﻿using DotSpatial.Projections;
-using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Auxiliary
@@ -8,13 +7,40 @@ namespace Assets.Scripts.Auxiliary
     {
         public static Vector2 ReprojectFrom_WGS84_To_GGRS87(float lat, float lng)
         {
-            double[] latLongs = new double[] { lng, lat };
-            double[] heights = new double[] { 0 };
+            return ReprojectFromToCoordinateSystem(lat, lng, 4326, 2100);
+        }
+
+        public static Vector2 ReprojectFromToCoordinateSystem(double lat, double lng, int sourceCRSCode, int destinationCRSCode)
+        {
             ProjectionInfo source = ProjectionInfo.FromEpsgCode(4326);
             ProjectionInfo destination = ProjectionInfo.FromEpsgCode(2100);
+            double[] latLongs = new double[] { lng, lat };
+            double[] heights = new double[] { 0 };
             Reproject.ReprojectPoints(latLongs, heights, source, destination, 0, heights.Length);
 
             return new Vector2((float)latLongs[0], (float)latLongs[1]);
+        }
+
+        public static Vector2[] ReprojectFromToCoordinateSystem(double[] lats, double[] lngs, int sourceCRSCode, int destinationCRSCode)
+        {
+            ProjectionInfo source = ProjectionInfo.FromEpsgCode(4326);
+            ProjectionInfo destination = ProjectionInfo.FromEpsgCode(2100);
+            double[] lngLats = new double[lats.Length * 2];
+            double[] heights = new double[lats.Length];
+            for (int i = 0; i < lats.Length; i++)
+            {
+                lngLats[i * 2] = lngs[i];
+                lngLats[i * 2 + 1] = lats[i];
+                heights[i] = 0;
+            }
+            Reproject.ReprojectPoints(lngLats, heights, source, destination, 0, heights.Length);
+
+            Vector2[] results = new Vector2[lats.Length];
+            for (int i = 0; i < lats.Length; i++)
+            {
+                results[i] = new Vector2((float)lngLats[i * 2], (float)lngLats[i * 2 +1]);
+            }
+            return results;
         }
     }
 }
