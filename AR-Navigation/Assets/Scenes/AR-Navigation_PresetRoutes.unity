@@ -274,7 +274,6 @@ GameObject:
   m_Component:
   - component: {fileID: 417367216}
   - component: {fileID: 417367215}
-  - component: {fileID: 417367217}
   - component: {fileID: 417367219}
   - component: {fileID: 417367220}
   m_Layer: 0
@@ -296,6 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28383f41c76be8c4fb42de3bb4065f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  apiKeyContainer: {fileID: 11400000, guid: a426b5ac0dc65dc4a9c974ad19e3b88b, type: 2}
   _routeVisualizationType: 0
   locationAtSceneLoad: {x: 0, y: 0}
   AR_origin: {fileID: 1948022999}
@@ -316,21 +316,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &417367217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 417367214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de6959bcf403dc74b98f2516ec16d726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startLatLong: {x: 38.01408, y: 23.74127}
-  endLatLong: {x: 38.02369, y: 23.73612}
-  apiKeyContainer: {fileID: 11400000, guid: a426b5ac0dc65dc4a9c974ad19e3b88b, type: 2}
 --- !u!114 &417367219
 MonoBehaviour:
   m_ObjectHideFlags: 0

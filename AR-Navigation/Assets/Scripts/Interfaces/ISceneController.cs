@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Services;
+using UnityEngine;
 
 namespace Assets.Scripts.Interfaces
 {
@@ -9,5 +10,6 @@ namespace Assets.Scripts.Interfaces
         Vector2 GetPositionGGRS87AtSceneLoad();
         float GetElevationAtSceneLoad();
         float GetCompassHeadingAtSceneLoad();
+        RoutingService GetRoutingService();
     }
 }

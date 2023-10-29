@@ -1,12 +1,12 @@
 ﻿using Assets.Scripts.Interfaces;
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Services;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public abstract class SceneControllerBase : MonoBehaviour, ISceneController
     {
+        [SerializeField] protected APIKeyContainer apiKeyContainer;
         [SerializeField] protected RouteVisualizationType _routeVisualizationType;
         [SerializeField] protected Vector2 locationAtSceneLoad;
         protected Vector2 locationNow;
@@ -15,6 +15,7 @@ namespace Assets.Scripts
         protected float elevationOpenTopoData_EUDEM;
         protected float elevationOpenTopoData_ASTER;
         protected float compassHeadingAtSceneLoad;
+        protected RoutingService routingService;
 
         public RouteVisualizationType routeVisualizationType
         {
@@ -23,6 +24,18 @@ namespace Assets.Scripts
                 return _routeVisualizationType;
             }
             set { }
+        }
+
+        public RoutingService GetRoutingService()
+        {
+            if(routingService == null)
+            {
+                routingService = new RoutingService(apiKeyContainer.OpenRouteServiceApiKey,
+                    RoutingService.OpenRouteServiceDirectionsApiBase,
+                    RoutingService.OpenRouteServiceDirectionProfileWalking);
+            }
+
+            return routingService;
         }
 
         public float GetElevationAtSceneLoad()
@@ -53,6 +66,5 @@ namespace Assets.Scripts
         {
             _routeVisualizationType = routeVisualizationType;
         }
-
     }
 }

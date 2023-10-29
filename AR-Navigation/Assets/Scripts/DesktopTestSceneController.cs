@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Auxiliary;
 using Assets.Scripts.Services;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +7,11 @@ namespace Assets.Scripts
 {
     public class DesktopTestSceneController : SceneControllerBase
     {
-        ReprojectionService reprojectionService;
+        [SerializeField] private Vector2 startLatLong = new Vector2(38.01408f, 23.74127f);
+        [SerializeField] private Vector2 endLatLong = new Vector2(38.02369f, 23.73612f);
+
+        private ReprojectionService reprojectionService;
+
         private void Start()
         {
             reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
@@ -40,7 +43,7 @@ namespace Assets.Scripts
         [ContextMenu("Make Default Query")]
         public void MakeRoutingQuery()
         {
-            RoutingHandler.Instance.StartDefaultQuery();
+            routingService.StartQuery(startLatLong, endLatLong);
         }
 
         public override Vector2 GetCurrentLocation()

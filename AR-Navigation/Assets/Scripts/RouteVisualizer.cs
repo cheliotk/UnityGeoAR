@@ -22,24 +22,25 @@ namespace Assets.Scripts
         [SerializeField] private Transform containerOpenTopoData_EUDEM;
         [SerializeField] private GameObject waypointPrefab;
         [SerializeField] private GameObject linePrefab;
-        private RoutingHandler routingHandler;
-
+        
         private SceneControllerBase sceneController;
+        private RoutingService routingService;
         private ReprojectionService reprojectionService;
 
         private void Start()
         {
             reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
             sceneController = FindObjectOfType<SceneControllerBase>();
-            routingHandler = RoutingHandler.Instance;
-            if (routingHandler != null)
-                routingHandler.onRouteReceived += RoutingHandler_onRouteReceived;
+
+            routingService = sceneController.GetRoutingService();
+            if (routingService != null)
+                routingService.onRouteReceived += RoutingHandler_onRouteReceived;
         }
 
         private void OnDestroy()
         {
-            if (routingHandler != null)
-                routingHandler.onRouteReceived -= RoutingHandler_onRouteReceived;
+            if (routingService != null)
+                routingService.onRouteReceived -= RoutingHandler_onRouteReceived;
         }
 
         public async void HandlePresetRoute(List<Vector2> route, List<string> waypointNames)

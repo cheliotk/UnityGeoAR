@@ -229,7 +229,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 417367216}
-  - component: {fileID: 417367217}
   - component: {fileID: 417367219}
   - component: {fileID: 417367220}
   - component: {fileID: 417367221}
@@ -255,21 +254,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &417367217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 417367214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de6959bcf403dc74b98f2516ec16d726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startLatLong: {x: 38.01408, y: 23.74127}
-  endLatLong: {x: 38.02369, y: 23.73612}
-  apiKeyContainer: {fileID: 11400000, guid: a426b5ac0dc65dc4a9c974ad19e3b88b, type: 2}
 --- !u!114 &417367219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,8 +298,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d060096b9443f6d4092fe6e471cbc1ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  apiKeyContainer: {fileID: 11400000, guid: a426b5ac0dc65dc4a9c974ad19e3b88b, type: 2}
   _routeVisualizationType: 0
   locationAtSceneLoad: {x: 38.014088, y: 23.741268}
+  startLatLong: {x: 38.01408, y: 23.74127}
+  endLatLong: {x: 38.02369, y: 23.73612}
 --- !u!1001 &481297896
 PrefabInstance:
   m_ObjectHideFlags: 0

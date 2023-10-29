@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Models.Nominatim;
-using System.Collections;
+using Assets.Scripts.Services;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +11,16 @@ namespace Assets.Scripts
         [SerializeField] private TMP_Text label;
         [SerializeField] private TMP_Text coordinatesText;
         public Feature selectedFeature { get; private set; }
+
+        private SceneControllerBase sceneController;
+        private RoutingService routingService;
+
+        private void Start()
+        {
+            sceneController = FindObjectOfType<SceneControllerBase>();
+
+            routingService = sceneController.GetRoutingService();
+        }
 
         public void SetSelectedFeature(Feature feature)
         {
@@ -29,8 +38,8 @@ namespace Assets.Scripts
         public void CalculateRoute()
         {
             Vector2 targetLocation = new Vector2((float)selectedFeature.geometry.coordinates[1], (float)selectedFeature.geometry.coordinates[0]);
-            RoutingHandler.Instance.SetTargetLocation(targetLocation);
-            RoutingHandler.Instance.StartQueryWithCurrentParameters();
+            routingService.SetTargetLocation(targetLocation);
+            routingService.StartQueryWithCurrentParameters();
         }
     }
 }
