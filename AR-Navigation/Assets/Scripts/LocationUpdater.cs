@@ -1,8 +1,10 @@
 ﻿using Assets.Scripts.Models;
+using Assets.Scripts.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -11,12 +13,13 @@ namespace Assets.Scripts
     {
         private const int MAX_COMPASS_RECORDS = 10;
         public static LocationUpdater Instance { get; private set; }
-        private bool isUpdating = true;
-        [SerializeField] private float updateInterval = 1f;
-
         public event EventHandler<LocationCompassData> onLocationCompassDataUpdatedEvent;
         public LocationCompassData lastLocationCompassData { get; private set; } = new LocationCompassData();
-        
+
+        [SerializeField] private float updateInterval = 1f;
+
+        private LocationUpdatesService locationUpdatesService;
+        private bool isUpdating = true;
         private readonly List<CompassData> latestCompassHeadings = new List<CompassData>();
 
         private void Awake()
@@ -31,6 +34,8 @@ namespace Assets.Scripts
             Application.logMessageReceived += Application_logMessageReceived;
 
             Instance = this;
+            locationUpdatesService = new LocationUpdatesService(1f, 1f);
+
             DontDestroyOnLoad(this.gameObject);
         }
 
@@ -42,36 +47,34 @@ namespace Assets.Scripts
         IEnumerator LocationUpdateCoroutine()
         {
             Debug.Log("Starting Location Updates");
+
+            // delay initialization for 1s to wait for Unity/android systems to initialize
             float i = 1f;
             while (i > 0f)
             {
                 i -= Time.deltaTime;
                 yield return null;
             }
+
+            // First location update, for listeners to initialize
             lastLocationCompassData.isFirstUpdate = true;
             onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
 
+            Task<LocationServiceInitializationResult> initializationTask = Task.Run(async () => await locationUpdatesService.WaitForLocationServiceInitialization());
+
+            // Wait for LocationUpdatesService to initialize
+            while (!initializationTask.IsCompleted)
+            {
+                yield return null;
+            }
+
             // First, check if user has location service enabled
-            if (!Input.location.isEnabledByUser)
+            if (initializationTask.Result == LocationServiceInitializationResult.NOT_ENABLED_BY_USER)
             {
                 Debug.Log("Location disabled by user");
                 yield break;
             }
-
-            // Start service before querying location
-            Input.location.Start(1f, 1f);
-            Input.compass.enabled = true;
-            // Wait until service initializes
-            int maxWait = 20;
-            while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-            {
-
-                yield return new WaitForSeconds(1);
-                maxWait--;
-            }
-
-            // Service didn't initialize in 20 seconds
-            if (maxWait < 1)
+            else if(initializationTask.Result == LocationServiceInitializationResult.FAILED_TO_INITIALIZE)
             {
                 Debug.Log("Timed out");
                 yield break;
@@ -83,10 +86,7 @@ namespace Assets.Scripts
             {
                 while (Time.time < timeForNextUpdate && isUpdating)
                 {
-                    lastLocationCompassData.compass.magneticHeading = Input.compass.magneticHeading;
-                    lastLocationCompassData.compass.trueHeading = Input.compass.trueHeading;
-                    lastLocationCompassData.compass.rawVector = Input.compass.rawVector;
-
+                    lastLocationCompassData.compass = locationUpdatesService.GetLatestCompassData();
                     latestCompassHeadings.Add(lastLocationCompassData.compass);
                     if(latestCompassHeadings.Count > MAX_COMPASS_RECORDS)
                     {
@@ -105,14 +105,9 @@ namespace Assets.Scripts
                 else
                 {
                     // Access granted and location value could be retrieved
-                    lastLocationCompassData.location.latitude = Input.location.lastData.latitude;
-                    lastLocationCompassData.location.longitude = Input.location.lastData.longitude;
-                    lastLocationCompassData.location.altitude = Input.location.lastData.altitude;
-
-                    lastLocationCompassData.timestamp = Input.location.lastData.timestamp;
+                    lastLocationCompassData.location = locationUpdatesService.GetLatestLocationData();
 
                     lastLocationCompassData.isFirstUpdate = false;
-
                     onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
                 }
                 timeForNextUpdate = Time.time + updateInterval;
