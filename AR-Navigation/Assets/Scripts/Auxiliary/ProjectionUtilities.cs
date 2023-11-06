@@ -1,4 +1,6 @@
-﻿using DotSpatial.Projections;
+﻿using Assets.Scripts.Models;
+using DotSpatial.Projections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Scripts.Auxiliary
@@ -47,6 +49,14 @@ namespace Assets.Scripts.Auxiliary
                 results[i] = new Vector2((float)lngLats[i * 2], (float)lngLats[i * 2 + 1]);
             }
             return results;
+        }
+    }
+
+    public static class Extensions
+    {
+        public static Vector2 toVector2(this LocationData locationData)
+        {
+            return new Vector2(locationData.latitude, locationData.longitude);
         }
     }
 

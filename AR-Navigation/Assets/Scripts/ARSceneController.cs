@@ -64,7 +64,7 @@ namespace Assets.Scripts
         {
             LocationCompassData lastLocationData = LocationUpdater.Instance.lastLocationCompassData;
             compassHeadingAtSceneLoad = LocationUpdater.Instance.GetAverageMagneticHeading();
-            locationSourceCRSAtSceneLoad = ConvertLocationDataToVector2(lastLocationData.location);
+            locationSourceCRSAtSceneLoad = lastLocationData.location.toVector2();
             locationDestinationCRSAtSceneLoad = _reprojectionService.ReprojectPoint(locationSourceCRSAtSceneLoad.x, locationSourceCRSAtSceneLoad.y);
 
             Vector2 tempLoc = new Vector2(locationSourceCRSAtSceneLoad.y, locationSourceCRSAtSceneLoad.x);
@@ -95,12 +95,7 @@ namespace Assets.Scripts
 
         public override Vector2 GetCurrentLocation()
         {
-            return ConvertLocationDataToVector2(LocationUpdater.Instance.lastLocationCompassData.location);
-        }
-
-        private Vector2 ConvertLocationDataToVector2(LocationData locationData)
-        {
-            return new Vector2(locationData.latitude, locationData.longitude);
+            return LocationUpdater.Instance.lastLocationCompassData.location.toVector2();
         }
     }
 }
