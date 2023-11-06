@@ -6,28 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MenuScene.unity
+    path: Assets/Scenes/AR-Navigation/AR-Navigation_MenuScene.unity
     guid: eb961e9da7a44cc4192a25614b70ffe6
   - enabled: 0
-    path: Assets/Scenes/CameraAlignmentTestScenes/CameraAlignment-MenuScene.unity
-    guid: 5dd6525b68d68274997f22bde3166137
-  - enabled: 0
-    path: Assets/Scenes/ARSampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/Scenes/CameraAlignmentTestScenes/Camera-Left.unity
-    guid: 41b0d52f6fe9c7c4c936d0ab76760b26
-  - enabled: 0
-    path: Assets/Scenes/CameraAlignmentTestScenes/Camera-Right.unity
-    guid: 7d2f013b21c3f2a4aa33314ddf651e81
-  - enabled: 0
-    path: Assets/Scenes/CameraAlignmentTestScenes/Camera-Back.unity
-    guid: aad7268950191d647af301b316ee3ace
+    path: Assets/Scenes/DesktopTestScene.unity
+    guid: 55fae2f2b1ba6864e9811274b7ffc396
   - enabled: 1
-    path: Assets/Scenes/AR-Navigation_TestScene.unity
+    path: Assets/Scenes/AR-Navigation/AR-Navigation_TestScene.unity
     guid: 9f4cfdaa30e124141b3b70f4e594d779
   - enabled: 1
-    path: Assets/Scenes/AR-Navigation_PresetRoutes.unity
+    path: Assets/Scenes/AR-Navigation/AR-Navigation_PresetRoutes.unity
     guid: 8ef6948127e41044a9be8871036958ae
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 95cc5c4c836a3b4449f0829dfb973e04, type: 2}

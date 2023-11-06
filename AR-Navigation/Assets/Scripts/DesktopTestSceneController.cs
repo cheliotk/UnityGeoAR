@@ -10,11 +10,8 @@ namespace Assets.Scripts
         [SerializeField] private Vector2 startLatLong = new Vector2(38.01408f, 23.74127f);
         [SerializeField] private Vector2 endLatLong = new Vector2(38.02369f, 23.73612f);
 
-        private ReprojectionService reprojectionService;
-
         private void Start()
         {
-            reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
             SetDefaultValues();
         }
 
@@ -25,7 +22,7 @@ namespace Assets.Scripts
                 locationAtSceneLoad = new Vector2(37.975321f, 23.780022f);
             }
 
-            locationGGRS87AtSceneLoad = reprojectionService.ReprojectPoint(locationAtSceneLoad.x, locationAtSceneLoad.y);
+            locationGGRS87AtSceneLoad = _reprojectionService.ReprojectPoint(locationAtSceneLoad.x, locationAtSceneLoad.y);
 
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };

@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Auxiliary;
 using Assets.Scripts.Models;
 using Assets.Scripts.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -27,9 +28,9 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            reprojectionService = new ReprojectionService((int)CommonCRS.WGS84, (int)CommonCRS.GGRS87);
             sceneController = FindObjectOfType<SceneControllerBase>();
 
+            reprojectionService = sceneController.ReprojectionService;
             elevationQueryService = sceneController.ElevationQueryService;
             routingService = sceneController.RoutingService;
             if (routingService != null)
@@ -145,7 +146,7 @@ namespace Assets.Scripts
             }
         }
 
-        private async Task PrepareWaypointBatchWithElevations(Vector2 startLocation, List<Vector2> tempLocationsList, bool clearStaleWaypoints)
+        private async Task PrepareWaypointBatchWithElevations(Vector2 startPointInCartesianSpace, List<Vector2> tempLocationsList, bool clearStaleWaypoints)
         {
             List<Vector3> currentWaypointPositions = new List<Vector3>();
             List<string> waypointNames = new List<string>();
@@ -153,14 +154,14 @@ namespace Assets.Scripts
             if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
             {
                 // OPEN_ELEVATION no longer supported
-                return;
+                throw new NotImplementedException("OPEN_ELEVATION no longer supported");
                 OpenElevationResponse elevationsResponse = await elevationQueryService.MakeOpenElevationQuery(tempLocationsList);
                 foreach (var coord in elevationsResponse.results)
                 {
                     Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord.latitude, coord.longitude);
 
                     float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad() - 1f);
-                    Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
+                    Vector3 point = new Vector3(point_GGRS87.x - startPointInCartesianSpace.x, y, point_GGRS87.y - startPointInCartesianSpace.y);
 
                     currentWaypointPositions.Add(point);
                     waypointNames.Add($"{coord.latitude},{coord.longitude}");
@@ -170,12 +171,12 @@ namespace Assets.Scripts
             {
                 OpenTopoDataResponse elevationsResponse = await elevationQueryService.MakeOpenTopoDataQuery(tempLocationsList, routeVisualizationType);
 
-                foreach (var coord in elevationsResponse.results)
+                foreach (OpenTopoDataResult coord in elevationsResponse.results)
                 {
-                    Vector2 point_GGRS87 = reprojectionService.ReprojectPoint((float)coord.location.lat, (float)coord.location.lng);
+                    Vector2 pointInCartesianSpace = reprojectionService.ReprojectPoint(coord.location.lat, coord.location.lng);
 
-                    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad());
-                    Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, y, point_GGRS87.y - startLocation.y);
+                    float y = coord.elevation - sceneController.GetElevationAtSceneLoad();
+                    Vector3 point = new Vector3(pointInCartesianSpace.x - startPointInCartesianSpace.x, y, pointInCartesianSpace.y - startPointInCartesianSpace.y);
 
                     currentWaypointPositions.Add(point);
                     waypointNames.Add($"{coord.location.lat},{coord.location.lng}");

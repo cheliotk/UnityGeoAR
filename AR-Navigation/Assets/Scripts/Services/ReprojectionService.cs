@@ -24,5 +24,15 @@ namespace Assets.Scripts.Services
         {
             return ProjectionUtilities.ReprojectFromToCoordinateSystem(lat, lng, DestinationProjection, SourceProjection);
         }
+
+        public Vector2[] ReprojectPoints(double[] lats, double[] lngs)
+        {
+            return ProjectionUtilities.ReprojectFromToCoordinateSystem(lats, lngs, SourceProjection, DestinationProjection);
+        }
+
+        public Vector2[] ReprojectPointsReverse(double[] lats, double[] lngs)
+        {
+            return ProjectionUtilities.ReprojectFromToCoordinateSystem(lats, lngs, DestinationProjection, SourceProjection);
+        }
     }
 }

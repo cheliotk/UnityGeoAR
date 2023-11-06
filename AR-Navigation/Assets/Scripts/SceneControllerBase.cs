@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Interfaces;
+﻿using Assets.Scripts.Auxiliary;
+using Assets.Scripts.Interfaces;
 using Assets.Scripts.Services;
 using UnityEngine;
 
@@ -9,12 +10,28 @@ namespace Assets.Scripts
         [SerializeField] protected APIKeyContainer apiKeyContainer;
         [SerializeField] protected RouteVisualizationType _routeVisualizationType;
         [SerializeField] protected Vector2 locationAtSceneLoad;
+        [SerializeField] protected CommonCRS sourceCRS = CommonCRS.WGS84;
+        [SerializeField] protected CommonCRS destinationCRS = CommonCRS.GGRS87;
         protected Vector2 locationNow;
         protected Vector2 locationGGRS87AtSceneLoad;
         protected float elevationOpenElevation;
         protected float elevationOpenTopoData_EUDEM;
         protected float elevationOpenTopoData_ASTER;
         protected float compassHeadingAtSceneLoad;
+
+        protected ReprojectionService _reprojectionService;
+        public ReprojectionService ReprojectionService
+        {
+            get
+            {
+                if(_reprojectionService == null)
+                {
+                    _reprojectionService = new ReprojectionService((int)sourceCRS, (int)destinationCRS);
+                }
+
+                return _reprojectionService;
+            }
+        }
 
         private RoutingService _routingService;
         public RoutingService RoutingService
