@@ -7,6 +7,7 @@ namespace Assets.Scripts
 {
     public class DesktopTestSceneController : SceneControllerBase
     {
+        [Header("Sample route start-end")]
         [SerializeField] private Vector2 startLatLong = new Vector2(38.01408f, 23.74127f);
         [SerializeField] private Vector2 endLatLong = new Vector2(38.02369f, 23.73612f);
 
