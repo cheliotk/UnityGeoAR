@@ -4,7 +4,7 @@ namespace Assets.Scripts.Interfaces
 {
     public interface ISceneController
     {
-        RouteVisualizationType routeVisualizationType { get; set; }
+        ElevationAPI routeVisualizationType { get; set; }
         Vector2 GetLocationAtSceneLoad();
         Vector2 GetPositionGGRS87AtSceneLoad();
         float GetElevationAtSceneLoad();

@@ -44,14 +44,14 @@ namespace Assets.Scripts.Services
             }
         }
 
-        public async Task<OpenTopoDataResponse> MakeOpenTopoDataQuery(List<Vector2> locations, RouteVisualizationType routeVisualizationType)
+        public async Task<OpenTopoDataResponse> MakeOpenTopoDataQuery(List<Vector2> locations, ElevationAPI routeVisualizationType)
         {
-            if (routeVisualizationType != RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM && routeVisualizationType != RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER)
+            if (routeVisualizationType != ElevationAPI.OPEN_TOPO_DATA_EUDEM && routeVisualizationType != ElevationAPI.OPEN_TOPO_DATA_ASTER)
                 throw new Exception($"Wrong Dataset requested: Expecting OpenTopoData, got {routeVisualizationType}");
 
             string locationsString = ConstructLocationsListStringFromVector2Array(locations);
 
-            string dataset = routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM ? OPENTOPODATA_DATASET_EUDEM : OPENTOPODATA_DATASET_ASTER;
+            string dataset = routeVisualizationType == ElevationAPI.OPEN_TOPO_DATA_EUDEM ? OPENTOPODATA_DATASET_EUDEM : OPENTOPODATA_DATASET_ASTER;
             string query = $"{OPENTOPODATA_API_BASE_GET}{dataset}locations={locationsString}";
 
             var baseAddress = new Uri(query);

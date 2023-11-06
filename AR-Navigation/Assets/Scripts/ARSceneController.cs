@@ -38,7 +38,7 @@ namespace Assets.Scripts
 
             dropdown.ClearOptions();
             List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
-            foreach (var elevationType in Enum.GetValues(typeof(RouteVisualizationType)))
+            foreach (var elevationType in Enum.GetValues(typeof(ElevationAPI)))
             {
                 options.Add(new TMP_Dropdown.OptionData(elevationType.ToString()));
             }
@@ -57,7 +57,7 @@ namespace Assets.Scripts
 
         private void DropdownOnValueChanged(int selectedOption)
         {
-            SetRouteVisualizationType((RouteVisualizationType)selectedOption);
+            SetRouteVisualizationType((ElevationAPI)selectedOption);
         }
 
         private async void SetStartValues()
@@ -70,10 +70,10 @@ namespace Assets.Scripts
             Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };
 
-            var resASTER = await ElevationQueryService.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER);
+            var resASTER = await ElevationQueryService.MakeOpenTopoDataQuery(locations, ElevationAPI.OPEN_TOPO_DATA_ASTER);
             elevationOpenTopoData_ASTER = resASTER.results[0].elevation+1;
 
-            var resEUDEM = await ElevationQueryService.MakeOpenTopoDataQuery(locations, RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM);
+            var resEUDEM = await ElevationQueryService.MakeOpenTopoDataQuery(locations, ElevationAPI.OPEN_TOPO_DATA_EUDEM);
             elevationOpenTopoData_EUDEM = resEUDEM.results[0].elevation+1;
 
             SetCameraRotation();

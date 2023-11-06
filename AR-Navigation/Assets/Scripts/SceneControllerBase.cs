@@ -8,7 +8,7 @@ namespace Assets.Scripts
     public abstract class SceneControllerBase : MonoBehaviour, ISceneController
     {
         [SerializeField] protected APIKeyContainer apiKeyContainer;
-        [SerializeField] protected RouteVisualizationType _routeVisualizationType;
+        [SerializeField] protected ElevationAPI _routeVisualizationType;
         [SerializeField] protected Vector2 locationAtSceneLoad;
         [SerializeField] protected CommonCRS sourceCRS = CommonCRS.WGS84;
         [SerializeField] protected CommonCRS destinationCRS = CommonCRS.GGRS87;
@@ -64,7 +64,7 @@ namespace Assets.Scripts
         }
 
 
-        public RouteVisualizationType routeVisualizationType
+        public ElevationAPI routeVisualizationType
         {
             get
             {
@@ -77,13 +77,13 @@ namespace Assets.Scripts
         {
             switch (_routeVisualizationType)
             {
-                case RouteVisualizationType.NO_ELEVATION:
+                case ElevationAPI.NO_ELEVATION:
                     return 1f;
-                case RouteVisualizationType.ELEVATION_OPEN_ELEVATION:
+                case ElevationAPI.OPEN_ELEVATION:
                     return elevationOpenElevation;
-                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM:
+                case ElevationAPI.OPEN_TOPO_DATA_EUDEM:
                     return elevationOpenTopoData_EUDEM;
-                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER:
+                case ElevationAPI.OPEN_TOPO_DATA_ASTER:
                     return elevationOpenTopoData_ASTER;
                 default:
                     return 1f;
@@ -97,7 +97,7 @@ namespace Assets.Scripts
         public float GetCompassHeadingAtSceneLoad() => compassHeadingAtSceneLoad;
 
         public abstract Vector2 GetCurrentLocation();
-        public void SetRouteVisualizationType(RouteVisualizationType routeVisualizationType)
+        public void SetRouteVisualizationType(ElevationAPI routeVisualizationType)
         {
             _routeVisualizationType = routeVisualizationType;
         }

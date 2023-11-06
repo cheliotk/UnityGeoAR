@@ -68,10 +68,7 @@ namespace Assets.Scripts.Services
             }
             else
             {
-                outCompassData.magneticHeading = compass.magneticHeading;
-                outCompassData.trueHeading = compass.trueHeading;
-                outCompassData.rawVector = compass.rawVector;
-                outCompassData.timestamp = compass.timestamp;
+                outCompassData = GetLatestCompassData();
                 return true;
             }
         }
@@ -91,16 +88,13 @@ namespace Assets.Scripts.Services
 
         public bool TryGetLatestLocationData(ref LocationData outLocationData)
         {
-            if(locationService.status == LocationServiceStatus.Failed)
+            if(locationService.status != LocationServiceStatus.Running)
             {
                 return false;
             }
             else
             {
-                outLocationData.latitude = locationService.lastData.latitude;
-                outLocationData.longitude = locationService.lastData.longitude;
-                outLocationData.altitude = locationService.lastData.altitude;
-                outLocationData.timestamp = locationService.lastData.timestamp;
+                outLocationData = GetLatestLocationData();
                 return true;
             }
         }
@@ -116,6 +110,30 @@ namespace Assets.Scripts.Services
             locationData.altitude = locationService.lastData.altitude;
             locationData.timestamp = locationService.lastData.timestamp;
             return locationData;
+        }
+
+        public bool TryGetLatestLocationCompassData(ref LocationCompassData outLocationCompassData)
+        {
+            if(locationService.status != LocationServiceStatus.Running
+                || initializationResult != LocationServiceInitializationResult.SUCCESS)
+            {
+                return false;
+            }
+
+            outLocationCompassData = GetLatestLocationCompassData();
+            return true;
+        }
+
+        public LocationCompassData GetLatestLocationCompassData()
+        {
+            if (initializationResult != LocationServiceInitializationResult.SUCCESS)
+                throw new InvalidOperationException("LocationUpdates has not initialized.");
+
+            LocationCompassData result = new LocationCompassData();
+            result.location = GetLatestLocationData();
+            result.compass = GetLatestCompassData();
+
+            return result;
         }
     }
 }

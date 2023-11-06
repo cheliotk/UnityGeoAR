@@ -12,7 +12,7 @@ namespace Assets.Scripts
     {
         public int OPENTOPODATA_QUEUE_SIZE = 5;
 
-        [SerializeField] private RouteVisualizationType routeVisualizationType = RouteVisualizationType.NO_ELEVATION;
+        [SerializeField] private ElevationAPI routeVisualizationType = ElevationAPI.NO_ELEVATION;
 
         [SerializeField] private Transform containerNoElevation;
         [SerializeField] private Transform containerOpenElevation;
@@ -47,7 +47,7 @@ namespace Assets.Scripts
         {
             try
             {
-                if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
+                if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
                 {
                     await PrepareWaypointsWithElevations(route);
                 }
@@ -89,7 +89,7 @@ namespace Assets.Scripts
                         List<List<double>> coords = feature.geometry.coordinates;
                         foreach (List<double> coord in coords)
                         {
-                            if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
+                            if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
                             {
                                 Vector2 location = new Vector2((float)coord[0], (float)coord[1]);
                                 locationsList.Add(location);
@@ -105,7 +105,7 @@ namespace Assets.Scripts
                         }
                     }
 
-                    if (routeVisualizationType != RouteVisualizationType.NO_ELEVATION)
+                    if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
                     {
                         await PrepareWaypointsWithElevations(locationsList);
                     }
@@ -151,7 +151,7 @@ namespace Assets.Scripts
             List<Vector3> currentWaypointPositions = new List<Vector3>();
             List<string> waypointNames = new List<string>();
 
-            if (routeVisualizationType == RouteVisualizationType.ELEVATION_OPEN_ELEVATION)
+            if (routeVisualizationType == ElevationAPI.OPEN_ELEVATION)
             {
                 // OPEN_ELEVATION no longer supported
                 throw new NotImplementedException("OPEN_ELEVATION no longer supported");
@@ -197,16 +197,16 @@ namespace Assets.Scripts
 
             switch (routeVisualizationType)
             {
-                case RouteVisualizationType.NO_ELEVATION:
+                case ElevationAPI.NO_ELEVATION:
                     container = containerNoElevation;
                     break;
-                case RouteVisualizationType.ELEVATION_OPEN_ELEVATION:
+                case ElevationAPI.OPEN_ELEVATION:
                     container = containerOpenElevation;
                     break;
-                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_EUDEM:
+                case ElevationAPI.OPEN_TOPO_DATA_EUDEM:
                     container = containerOpenTopoData_EUDEM;
                     break;
-                case RouteVisualizationType.ELEVATION_OPEN_TOPO_DATA_ASTER:
+                case ElevationAPI.OPEN_TOPO_DATA_ASTER:
                     container = containerOpenTopoData_ASTER;
                     break;
                 default:
@@ -241,7 +241,7 @@ namespace Assets.Scripts
             waypoint.name = waypointName;
         }
 
-        private void ClearCurrentWaypoints(RouteVisualizationType routeVisualizationType)
+        private void ClearCurrentWaypoints(ElevationAPI routeVisualizationType)
         {
             foreach (Transform child in containerNoElevation.transform)
             {
@@ -265,11 +265,11 @@ namespace Assets.Scripts
         }
     }
 
-    public enum RouteVisualizationType
+    public enum ElevationAPI
     {
         NO_ELEVATION = 0,
-        ELEVATION_OPEN_ELEVATION = 1,
-        ELEVATION_OPEN_TOPO_DATA_EUDEM = 2,
-        ELEVATION_OPEN_TOPO_DATA_ASTER = 3
+        OPEN_ELEVATION = 1,
+        OPEN_TOPO_DATA_EUDEM = 2,
+        OPEN_TOPO_DATA_ASTER = 3
     }
 }
