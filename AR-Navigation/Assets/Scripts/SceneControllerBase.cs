@@ -40,9 +40,7 @@ namespace Assets.Scripts
             {
                 if(_routingService == null)
                 {
-                    _routingService = new RoutingService(apiKeyContainer.OpenRouteServiceApiKey,
-                        RoutingService.OpenRouteServiceDirectionsApiBase,
-                        RoutingService.OpenRouteServiceDirectionProfileWalking);
+                    _routingService = new RoutingService(apiKeyContainer.OpenRouteServiceApiKey);
                 }
 
                 return _routingService;

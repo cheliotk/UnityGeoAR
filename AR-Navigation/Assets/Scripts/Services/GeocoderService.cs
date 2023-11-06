@@ -8,13 +8,13 @@ namespace Assets.Scripts.Services
 {
     public class GeocoderService
     {
-        public static string NominatimGeocoderApiBase = "https://nominatim.openstreetmap.org/search?";
+        private const string NOMINATIM_GEOCODER_API_BASE = "https://nominatim.openstreetmap.org/search?";
 
         public event EventHandler<NominatimResponse> onGeocodeResultsReceived;
         private string searchTerm = "";
         private string geocoderApiBase;
 
-        public GeocoderService(string geocoderApiBase)
+        public GeocoderService(string geocoderApiBase = NOMINATIM_GEOCODER_API_BASE)
         {
             this.geocoderApiBase = geocoderApiBase;
         }

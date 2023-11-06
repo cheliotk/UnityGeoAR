@@ -10,8 +10,8 @@ namespace Assets.Scripts.Services
 {
     public class RoutingService
     {
-        public static string OpenRouteServiceDirectionsApiBase = "https://api.openrouteservice.org/v2/directions";
-        public static string OpenRouteServiceDirectionProfileWalking = "foot-walking";
+        private const string DIRECTIONS_API_BASE = "https://api.openrouteservice.org/v2/directions";
+        private const string PROFILE_WALKING = "foot-walking";
         public event EventHandler<OpenRouteServiceResponse> onRouteReceived;
 
         private Vector2 originLatLong = default;
@@ -22,7 +22,9 @@ namespace Assets.Scripts.Services
         private string directionsApiBase;
         private string directionsProfile;
 
-        public RoutingService(string openRouteServiceApiKey, string directionsApiBase, string directionsProfile)
+        public RoutingService(string openRouteServiceApiKey,
+            string directionsApiBase = DIRECTIONS_API_BASE,
+            string directionsProfile = PROFILE_WALKING)
         {
             this.openRouteServiceApiKey = openRouteServiceApiKey;
             this.directionsApiBase = directionsApiBase;

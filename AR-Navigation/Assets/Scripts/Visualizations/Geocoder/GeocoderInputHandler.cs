@@ -12,7 +12,7 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            geocoder = new GeocoderService(GeocoderService.NominatimGeocoderApiBase);
+            geocoder = new GeocoderService();
 
             if(inputField != null)
                 inputField.onSubmit.AddListener(MakeQuery);

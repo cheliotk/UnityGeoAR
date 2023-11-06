@@ -19,7 +19,7 @@ namespace Assets.Scripts
         {
             if(Mathf.Approximately((Vector2.zero - locationAtSceneLoad).magnitude, 0f))
             {
-                locationAtSceneLoad = new Vector2(37.975321f, 23.780022f);
+                locationAtSceneLoad = new Vector2(38.01408f, 23.74127f);
             }
 
             locationGGRS87AtSceneLoad = _reprojectionService.ReprojectPoint(locationAtSceneLoad.x, locationAtSceneLoad.y);
