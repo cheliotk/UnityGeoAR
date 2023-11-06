@@ -9,11 +9,11 @@ namespace Assets.Scripts
     {
         [SerializeField] protected APIKeyContainer apiKeyContainer;
         [SerializeField] protected ElevationAPI _routeVisualizationType;
-        [SerializeField] protected Vector2 locationAtSceneLoad;
+        [SerializeField] protected Vector2 locationSourceCRSAtSceneLoad;
         [SerializeField] protected CommonCRS sourceCRS = CommonCRS.WGS84;
         [SerializeField] protected CommonCRS destinationCRS = CommonCRS.GGRS87;
         protected Vector2 locationNow;
-        protected Vector2 locationGGRS87AtSceneLoad;
+        protected Vector2 locationDestinationCRSAtSceneLoad;
         protected float elevationOpenElevation;
         protected float elevationOpenTopoData_EUDEM;
         protected float elevationOpenTopoData_ASTER;
@@ -88,9 +88,9 @@ namespace Assets.Scripts
             }
         }
 
-        public Vector2 GetLocationAtSceneLoad() => locationAtSceneLoad;
+        public Vector2 GetLocationSourceCRSAtSceneLoad() => locationSourceCRSAtSceneLoad;
 
-        public Vector2 GetPositionGGRS87AtSceneLoad() => locationGGRS87AtSceneLoad;
+        public Vector2 GetLocationDestinationCRSAtSceneLoad() => locationDestinationCRSAtSceneLoad;
 
         public float GetCompassHeadingAtSceneLoad() => compassHeadingAtSceneLoad;
 

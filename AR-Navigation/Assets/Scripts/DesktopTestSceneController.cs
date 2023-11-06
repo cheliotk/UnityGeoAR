@@ -17,14 +17,14 @@ namespace Assets.Scripts
 
         private async void SetDefaultValues()
         {
-            if(Mathf.Approximately((Vector2.zero - locationAtSceneLoad).magnitude, 0f))
+            if(Mathf.Approximately((Vector2.zero - locationSourceCRSAtSceneLoad).magnitude, 0f))
             {
-                locationAtSceneLoad = new Vector2(38.01408f, 23.74127f);
+                locationSourceCRSAtSceneLoad = new Vector2(38.01408f, 23.74127f);
             }
 
-            locationGGRS87AtSceneLoad = _reprojectionService.ReprojectPoint(locationAtSceneLoad.x, locationAtSceneLoad.y);
+            locationDestinationCRSAtSceneLoad = _reprojectionService.ReprojectPoint(locationSourceCRSAtSceneLoad.x, locationSourceCRSAtSceneLoad.y);
 
-            Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
+            Vector2 tempLoc = new Vector2(locationSourceCRSAtSceneLoad.y, locationSourceCRSAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };
 
             var resASTER = await ElevationQueryService.MakeOpenTopoDataQuery(locations, ElevationAPI.OPEN_TOPO_DATA_ASTER);
@@ -42,7 +42,7 @@ namespace Assets.Scripts
 
         public override Vector2 GetCurrentLocation()
         {
-            return GetLocationAtSceneLoad();
+            return GetLocationSourceCRSAtSceneLoad();
         }
     }
 }

@@ -64,10 +64,10 @@ namespace Assets.Scripts
         {
             LocationCompassData lastLocationData = LocationUpdater.Instance.lastLocationCompassData;
             compassHeadingAtSceneLoad = LocationUpdater.Instance.GetAverageMagneticHeading();
-            locationAtSceneLoad = ConvertLocationDataToVector2(lastLocationData.location);
-            locationGGRS87AtSceneLoad = _reprojectionService.ReprojectPoint(locationAtSceneLoad.x, locationAtSceneLoad.y);
+            locationSourceCRSAtSceneLoad = ConvertLocationDataToVector2(lastLocationData.location);
+            locationDestinationCRSAtSceneLoad = _reprojectionService.ReprojectPoint(locationSourceCRSAtSceneLoad.x, locationSourceCRSAtSceneLoad.y);
 
-            Vector2 tempLoc = new Vector2(locationAtSceneLoad.y, locationAtSceneLoad.x);
+            Vector2 tempLoc = new Vector2(locationSourceCRSAtSceneLoad.y, locationSourceCRSAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };
 
             var resASTER = await ElevationQueryService.MakeOpenTopoDataQuery(locations, ElevationAPI.OPEN_TOPO_DATA_ASTER);

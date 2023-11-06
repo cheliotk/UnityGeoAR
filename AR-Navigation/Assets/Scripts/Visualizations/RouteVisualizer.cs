@@ -56,7 +56,7 @@ namespace Assets.Scripts
                     List<Vector3> waypoints = new List<Vector3>();
                     foreach (Vector2 coord in route)
                     {
-                        Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
+                        Vector2 startLocation = sceneController.GetLocationDestinationCRSAtSceneLoad();
                         Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord.y, coord.x);
                         Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
                         waypoints.Add(point);
@@ -77,7 +77,7 @@ namespace Assets.Scripts
                 routeVisualizationType = sceneController.routeVisualizationType;
                 if (response?.features != null)
                 {
-                    Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
+                    Vector2 startLocation = sceneController.GetLocationDestinationCRSAtSceneLoad();
                     ClearCurrentWaypoints(routeVisualizationType);
                 
                     List<Vector2> locationsList = new List<Vector2>();
@@ -125,7 +125,7 @@ namespace Assets.Scripts
         {
             routeVisualizationType = sceneController.routeVisualizationType;
             ClearCurrentWaypoints(routeVisualizationType);
-            Vector2 startLocation = sceneController.GetPositionGGRS87AtSceneLoad();
+            Vector2 startLocation = sceneController.GetLocationDestinationCRSAtSceneLoad();
 
             List<Vector2> tempLocationsList = new List<Vector2>();
 
