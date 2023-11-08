@@ -65,7 +65,7 @@ namespace Assets.Scripts
             LocationCompassData lastLocationData = LocationUpdater.Instance.lastLocationCompassData;
             compassHeadingAtSceneLoad = LocationUpdater.Instance.GetAverageMagneticHeading();
             locationSourceCRSAtSceneLoad = lastLocationData.location.toVector2();
-            locationDestinationCRSAtSceneLoad = _reprojectionService.ReprojectPoint(locationSourceCRSAtSceneLoad.x, locationSourceCRSAtSceneLoad.y);
+            locationDestinationCRSAtSceneLoad = ReprojectionService.ReprojectPoint(locationSourceCRSAtSceneLoad.x, locationSourceCRSAtSceneLoad.y);
 
             Vector2 tempLoc = new Vector2(locationSourceCRSAtSceneLoad.y, locationSourceCRSAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };

@@ -23,7 +23,7 @@ namespace Assets.Scripts
                 locationSourceCRSAtSceneLoad = new Vector2(38.01408f, 23.74127f);
             }
 
-            locationDestinationCRSAtSceneLoad = _reprojectionService.ReprojectPoint(locationSourceCRSAtSceneLoad.x, locationSourceCRSAtSceneLoad.y);
+            locationDestinationCRSAtSceneLoad = ReprojectionService.ReprojectPoint(locationSourceCRSAtSceneLoad.x, locationSourceCRSAtSceneLoad.y);
 
             Vector2 tempLoc = new Vector2(locationSourceCRSAtSceneLoad.y, locationSourceCRSAtSceneLoad.x);
             List<Vector2> locations = new List<Vector2>() { tempLoc };

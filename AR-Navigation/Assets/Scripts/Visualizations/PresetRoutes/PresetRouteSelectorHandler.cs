@@ -130,7 +130,7 @@ public class PresetRouteSelectorHandler : MonoBehaviour
         {
             PresetRouteEntry entry = sender as PresetRouteEntry;
             List<Vector2> route = routesDict[entry.index].waypoints;
-            await routeVisualizer.HandlePresetRoute(routesDict[entry.index].waypoints, routesDict[entry.index].waypointNames);
+            await routeVisualizer.HandlePresetRoute(new List<Vector2>(routesDict[entry.index].waypoints), routesDict[entry.index].waypointNames);
         }
         catch (Exception)
         {

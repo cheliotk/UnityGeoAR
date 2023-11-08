@@ -19,7 +19,25 @@ namespace Assets.Scripts
         protected float elevationOpenTopoData_ASTER;
         protected float compassHeadingAtSceneLoad;
 
-        protected ReprojectionService _reprojectionService;
+        private WorldToUnityService _worldToUnityService;
+        public WorldToUnityService WorldToUnityService
+        {
+            get
+            {
+                if(_worldToUnityService == null)
+                {
+                    _worldToUnityService = new WorldToUnityService(ReprojectionService,
+                        ElevationQueryService,
+                        locationSourceCRSAtSceneLoad,
+                        elevationOpenTopoData_ASTER,
+                        elevationOpenTopoData_EUDEM);
+                }
+
+                return _worldToUnityService;
+            }
+        }
+
+        private ReprojectionService _reprojectionService;
         public ReprojectionService ReprojectionService
         {
             get

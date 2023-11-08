@@ -43,7 +43,7 @@ namespace Assets.Scripts.Services
                 return await ConvertWorldToUnityWithElevation(xyCoords, elevationAPI);
         }
 
-        public async Task<Vector3[]> GetUnityPositionsFromCoordinates(List<Vector2> xyCoords, ElevationAPI elevationAPI)
+        public async Task<List<Vector3>> GetUnityPositionsFromCoordinates(List<Vector2> xyCoords, ElevationAPI elevationAPI)
         {
             if (elevationAPI == ElevationAPI.OPEN_ELEVATION)
                 throw new NotSupportedException("OPEN_ELEVATION no longer supported");
@@ -59,7 +59,7 @@ namespace Assets.Scripts.Services
             return new Vector3(pointDestinationCRS.x - originLocationDestinationCRS.x, 0f, pointDestinationCRS.y - originLocationDestinationCRS.y);
         }
 
-        private Vector3[] ConvertWorldToUnityNoElevation(List<Vector2> xyCoords)
+        private List<Vector3> ConvertWorldToUnityNoElevation(List<Vector2> xyCoords)
         {
             double[] lats = new double[xyCoords.Count];
             double[] longs = new double[xyCoords.Count];
@@ -69,11 +69,11 @@ namespace Assets.Scripts.Services
                 longs[i] = xyCoords[i].x;
             }
             Vector2[] pointsDestinationCRS = reprojectionService.ReprojectPoints(lats, longs);
-            Vector3[] points = new Vector3[pointsDestinationCRS.Length];
+            List<Vector3> points = new List<Vector3>();
             for (int i = 0; i < pointsDestinationCRS.Length; i++)
             {
                 Vector2 p = pointsDestinationCRS[i];
-                points[i] = new Vector3(p.x - originLocationDestinationCRS.x, 0f, p.y - originLocationDestinationCRS.y);
+                points.Add(new Vector3(p.x - originLocationDestinationCRS.x, 0f, p.y - originLocationDestinationCRS.y));
             }
 
             return points;
@@ -97,7 +97,7 @@ namespace Assets.Scripts.Services
             return point;
         }
 
-        private async Task<Vector3[]> ConvertWorldToUnityWithElevation(List<Vector2> xyCoords, ElevationAPI elevationAPI)
+        private async Task<List<Vector3>> ConvertWorldToUnityWithElevation(List<Vector2> xyCoords, ElevationAPI elevationAPI)
         {
             if (elevationAPI == ElevationAPI.OPEN_ELEVATION)
                 throw new NotSupportedException("OPEN_ELEVATION no longer supported");
@@ -106,7 +106,7 @@ namespace Assets.Scripts.Services
 
             OpenTopoDataResponse elevationsResponse = await elevationQueryService.MakeOpenTopoDataQuery(xyCoords, elevationAPI);
 
-            Vector3[] points = new Vector3[xyCoords.Count];
+            List<Vector3> points = new List<Vector3>();
             for (int i = 0; i < elevationsResponse.results.Count; i++)
             {
                 OpenTopoDataResult coord = elevationsResponse.results[i];
@@ -115,7 +115,7 @@ namespace Assets.Scripts.Services
                 //float elevation = coord.elevation;
                 float unityY = elevationAPI == ElevationAPI.OPEN_TOPO_DATA_EUDEM ? coord.elevation - elevationOpenTopoData_EUDEM : coord.elevation - elevationOpenTopoData_ASTER;
                 Vector3 point = new Vector3(pointInCartesianSpace.x - originLocationDestinationCRS.x, unityY, pointInCartesianSpace.y - originLocationDestinationCRS.y);
-                points[i] = point;
+                points.Add(point);
             }
 
             return points;
