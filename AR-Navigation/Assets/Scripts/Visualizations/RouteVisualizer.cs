@@ -42,15 +42,7 @@ namespace Assets.Scripts
         {
             try
             {
-                if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
-                {
-                    await PrepareWaypointsWithElevations(route);
-                }
-                else
-                {
-                    List<Vector3> waypoints = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(route, ElevationAPI.NO_ELEVATION);
-                    VisualizeRoute(waypoints, waypointNames);
-                }
+                await ConvertRouteToUnityAndVisualize(route, waypointNames);
             }
             catch (System.Exception)
             {
@@ -65,7 +57,6 @@ namespace Assets.Scripts
                 routeVisualizationType = sceneController.routeVisualizationType;
                 if (response?.features != null)
                 {
-                    Vector2 startLocation = sceneController.GetLocationDestinationCRSAtSceneLoad();
                     ClearCurrentWaypoints(routeVisualizationType);
                 
                     List<Vector2> locationsList = new List<Vector2>();
@@ -81,16 +72,8 @@ namespace Assets.Scripts
                             waypointNames.Add($"{coord[1]},{coord[0]}");
                         }
                     }
-                    if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
-                    {
-                        await PrepareWaypointsWithElevations(locationsList);
-                    }
-                    else
-                    {
 
-                        List<Vector3> waypointPositions = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(locationsList, routeVisualizationType);
-                        VisualizeRoute(waypointPositions, waypointNames);
-                    }
+                    await ConvertRouteToUnityAndVisualize(locationsList, waypointNames);
                 }
             }
             catch (System.Exception)
@@ -99,11 +82,23 @@ namespace Assets.Scripts
             }
         }
 
+        private async Task ConvertRouteToUnityAndVisualize(List<Vector2> route, List<string> waypointNames)
+        {
+            if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
+            {
+                await PrepareWaypointsWithElevations(route);
+            }
+            else
+            {
+                List<Vector3> waypoints = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(route, ElevationAPI.NO_ELEVATION);
+                VisualizeRoute(waypoints, waypointNames);
+            }
+        }
+
         public async Task PrepareWaypointsWithElevations(List<Vector2> locationsList)
         {
             routeVisualizationType = sceneController.routeVisualizationType;
             ClearCurrentWaypoints(routeVisualizationType);
-            Vector2 startLocation = sceneController.GetLocationDestinationCRSAtSceneLoad();
 
             List<Vector2> tempLocationsList = new List<Vector2>();
 
@@ -112,7 +107,7 @@ namespace Assets.Scripts
             {
                 tempLocationsList.AddRange(locationsList.GetRange(0, OPENTOPODATA_QUEUE_SIZE));
                 locationsList.RemoveRange(0, OPENTOPODATA_QUEUE_SIZE - 1);
-                await PrepareWaypointBatchWithElevations(startLocation, tempLocationsList, clearStaleWaypoints);
+                await PrepareWaypointBatchWithElevations(tempLocationsList, clearStaleWaypoints);
                 clearStaleWaypoints = false;
                 tempLocationsList.Clear();
             }
@@ -120,11 +115,11 @@ namespace Assets.Scripts
             if(locationsList.Count > 0)
             {
                 tempLocationsList.AddRange(locationsList);
-                await PrepareWaypointBatchWithElevations(startLocation, tempLocationsList, clearStaleWaypoints);
+                await PrepareWaypointBatchWithElevations(tempLocationsList, clearStaleWaypoints);
             }
         }
 
-        private async Task PrepareWaypointBatchWithElevations(Vector2 startPointInCartesianSpace, List<Vector2> tempLocationsList, bool clearStaleWaypoints)
+        private async Task PrepareWaypointBatchWithElevations(List<Vector2> tempLocationsList, bool clearStaleWaypoints)
         {
             List<string> waypointNames = new List<string>();
             foreach (var waypoint in tempLocationsList)
