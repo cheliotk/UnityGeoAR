@@ -38,8 +38,7 @@ namespace Assets.Scripts
         public void CalculateRoute()
         {
             Vector2 targetLocation = new Vector2((float)selectedFeature.geometry.coordinates[1], (float)selectedFeature.geometry.coordinates[0]);
-            routingService.SetTargetLocation(targetLocation);
-            routingService.StartQueryWithCurrentParameters();
+            routingService.StartQueryWithParameters(sceneController.GetCurrentLocation(), targetLocation);
         }
     }
 }

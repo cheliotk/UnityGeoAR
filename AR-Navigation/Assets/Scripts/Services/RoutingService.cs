@@ -32,9 +32,12 @@ namespace Assets.Scripts.Services
         }
 
         public void SetTargetLocation(Vector2 targetLatLong) => destinationLatLong = targetLatLong;
-        public void StartQueryWithCurrentParameters() => StartQuery(originLatLong, destinationLatLong);
+        public void StartQueryWithParameters(Vector2 startLatLong,  Vector2 endLatLong)
+        {
+            StartQuery(originLatLong, destinationLatLong);
+        }
 
-        public async void StartQuery(Vector2 originLatLong, Vector2 destinationLatLong)
+        private async void StartQuery(Vector2 originLatLong, Vector2 destinationLatLong)
         {
             this.originLatLong = originLatLong;
             this.destinationLatLong = destinationLatLong;

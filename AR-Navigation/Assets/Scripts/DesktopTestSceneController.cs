@@ -38,7 +38,7 @@ namespace Assets.Scripts
         [ContextMenu("Make Default Query")]
         public void MakeRoutingQuery()
         {
-            RoutingService.StartQuery(startLatLong, endLatLong);
+            RoutingService.StartQueryWithParameters(startLatLong, endLatLong);
         }
 
         public override Vector2 GetCurrentLocation()
