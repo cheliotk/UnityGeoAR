@@ -154,7 +154,7 @@ namespace Assets.Scripts
             if (routeVisualizationType == ElevationAPI.OPEN_ELEVATION)
             {
                 // OPEN_ELEVATION no longer supported
-                throw new NotImplementedException("OPEN_ELEVATION no longer supported");
+                throw new NotSupportedException("OPEN_ELEVATION no longer supported");
                 OpenElevationResponse elevationsResponse = await elevationQueryService.MakeOpenElevationQuery(tempLocationsList);
                 foreach (var coord in elevationsResponse.results)
                 {
