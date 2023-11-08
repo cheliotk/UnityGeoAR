@@ -11,8 +11,6 @@ namespace Assets.Scripts
     {
         public int OPENTOPODATA_QUEUE_SIZE = 5;
 
-        [SerializeField] private ElevationAPI routeVisualizationType = ElevationAPI.NO_ELEVATION;
-
         [SerializeField] private Transform containerNoElevation;
         [SerializeField] private Transform containerOpenElevation;
         [SerializeField] private Transform containerOpenTopoData_ASTER;
@@ -42,7 +40,7 @@ namespace Assets.Scripts
         {
             try
             {
-                await ConvertRouteToUnityAndVisualize(route, waypointNames);
+                await ConvertRouteToUnityAndVisualize(route, waypointNames, sceneController.routeVisualizationType);
             }
             catch (System.Exception)
             {
@@ -54,10 +52,10 @@ namespace Assets.Scripts
         {
             try
             {
-                routeVisualizationType = sceneController.routeVisualizationType;
+                ElevationAPI elevationAPI = sceneController.routeVisualizationType;
                 if (response?.features != null)
                 {
-                    ClearCurrentWaypoints(routeVisualizationType);
+                    ClearCurrentWaypoints(elevationAPI);
                 
                     List<Vector2> locationsList = new List<Vector2>();
                     List<string> waypointNames = new List<string>();
@@ -73,7 +71,7 @@ namespace Assets.Scripts
                         }
                     }
 
-                    await ConvertRouteToUnityAndVisualize(locationsList, waypointNames);
+                    await ConvertRouteToUnityAndVisualize(locationsList, waypointNames, elevationAPI);
                 }
             }
             catch (System.Exception)
@@ -82,23 +80,22 @@ namespace Assets.Scripts
             }
         }
 
-        private async Task ConvertRouteToUnityAndVisualize(List<Vector2> route, List<string> waypointNames)
+        private async Task ConvertRouteToUnityAndVisualize(List<Vector2> route, List<string> waypointNames, ElevationAPI elevationAPI)
         {
-            if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
+            if (elevationAPI != ElevationAPI.NO_ELEVATION)
             {
-                await PrepareWaypointsWithElevations(route);
+                await PrepareWaypointsWithElevations(route, elevationAPI);
             }
             else
             {
                 List<Vector3> waypoints = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(route, ElevationAPI.NO_ELEVATION);
-                VisualizeRoute(waypoints, waypointNames);
+                VisualizeRoute(waypoints, waypointNames, elevationAPI);
             }
         }
 
-        public async Task PrepareWaypointsWithElevations(List<Vector2> locationsList)
+        public async Task PrepareWaypointsWithElevations(List<Vector2> locationsList, ElevationAPI elevationAPI)
         {
-            routeVisualizationType = sceneController.routeVisualizationType;
-            ClearCurrentWaypoints(routeVisualizationType);
+            ClearCurrentWaypoints(elevationAPI);
 
             List<Vector2> tempLocationsList = new List<Vector2>();
 
@@ -107,7 +104,7 @@ namespace Assets.Scripts
             {
                 tempLocationsList.AddRange(locationsList.GetRange(0, OPENTOPODATA_QUEUE_SIZE));
                 locationsList.RemoveRange(0, OPENTOPODATA_QUEUE_SIZE - 1);
-                await PrepareWaypointBatchWithElevations(tempLocationsList, clearStaleWaypoints);
+                await PrepareWaypointBatchWithElevations(tempLocationsList, elevationAPI, clearStaleWaypoints);
                 clearStaleWaypoints = false;
                 tempLocationsList.Clear();
             }
@@ -115,11 +112,11 @@ namespace Assets.Scripts
             if(locationsList.Count > 0)
             {
                 tempLocationsList.AddRange(locationsList);
-                await PrepareWaypointBatchWithElevations(tempLocationsList, clearStaleWaypoints);
+                await PrepareWaypointBatchWithElevations(tempLocationsList, elevationAPI, clearStaleWaypoints);
             }
         }
 
-        private async Task PrepareWaypointBatchWithElevations(List<Vector2> tempLocationsList, bool clearStaleWaypoints)
+        private async Task PrepareWaypointBatchWithElevations(List<Vector2> tempLocationsList, ElevationAPI elevationAPI, bool clearStaleWaypoints)
         {
             List<string> waypointNames = new List<string>();
             foreach (var waypoint in tempLocationsList)
@@ -127,26 +124,24 @@ namespace Assets.Scripts
                 waypointNames.Add($"{waypoint.y},{waypoint.x}");
             }
 
-            if (routeVisualizationType == ElevationAPI.OPEN_ELEVATION)
+            if (elevationAPI == ElevationAPI.OPEN_ELEVATION)
             {
                 // OPEN_ELEVATION no longer supported
                 throw new NotSupportedException("OPEN_ELEVATION no longer supported");
             }
 
-            List<Vector3> currentWaypointPositions = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(tempLocationsList, routeVisualizationType);
-            VisualizeRoute(currentWaypointPositions, waypointNames, clearStaleWaypoints);
+            List<Vector3> currentWaypointPositions = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(tempLocationsList, elevationAPI);
+            VisualizeRoute(currentWaypointPositions, waypointNames, elevationAPI, clearStaleWaypoints);
         }
 
-        private void VisualizeRoute(List<Vector3> waypointPositions, List<string> waypointNames, bool clearStaleWaypoints = true)
-        {
-            routeVisualizationType = sceneController.routeVisualizationType;
-            
+        private void VisualizeRoute(List<Vector3> waypointPositions, List<string> waypointNames, ElevationAPI elevationAPI, bool clearStaleWaypoints = true)
+        {            
             if(clearStaleWaypoints)
-                ClearCurrentWaypoints(routeVisualizationType);
+                ClearCurrentWaypoints(elevationAPI);
 
             Transform container;
 
-            switch (routeVisualizationType)
+            switch (elevationAPI)
             {
                 case ElevationAPI.NO_ELEVATION:
                     container = containerNoElevation;
