@@ -1,9 +1,7 @@
-﻿using Assets.Scripts.Auxiliary;
-using Assets.Scripts.Models;
+﻿using Assets.Scripts.Models;
 using Assets.Scripts.Services;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -24,15 +22,11 @@ namespace Assets.Scripts
         
         private SceneControllerBase sceneController;
         private RoutingService routingService;
-        //private ReprojectionService reprojectionService;
-        //private ElevationQueryService elevationQueryService;
 
         private void Start()
         {
             sceneController = FindObjectOfType<SceneControllerBase>();
 
-            //reprojectionService = sceneController.ReprojectionService;
-            //elevationQueryService = sceneController.ElevationQueryService;
             routingService = sceneController.RoutingService;
             if (routingService != null)
                 routingService.onRouteReceived += RoutingHandler_onRouteReceived;
@@ -54,16 +48,7 @@ namespace Assets.Scripts
                 }
                 else
                 {
-                    //List<Vector3> waypoints = new List<Vector3>();
                     List<Vector3> waypoints = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(route, ElevationAPI.NO_ELEVATION);
-
-                    //foreach (Vector2 coord in route)
-                    //{
-                    //    Vector2 startLocation = sceneController.GetLocationDestinationCRSAtSceneLoad();
-                    //    Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord.y, coord.x);
-                    //    Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
-                    //    waypoints.Add(point);
-                    //}
                     VisualizeRoute(waypoints, waypointNames);
                 }
             }
@@ -84,7 +69,6 @@ namespace Assets.Scripts
                     ClearCurrentWaypoints(routeVisualizationType);
                 
                     List<Vector2> locationsList = new List<Vector2>();
-                    //List<Vector3> waypointPositions = new List<Vector3>();
                     List<string> waypointNames = new List<string>();
 
                     foreach (Feature feature in response.features)
@@ -95,20 +79,6 @@ namespace Assets.Scripts
                             Vector2 location = new Vector2((float)coord[0], (float)coord[1]);
                             locationsList.Add(location);
                             waypointNames.Add($"{coord[1]},{coord[0]}");
-
-                            //if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
-                            //{
-                            //    Vector2 location = new Vector2((float)coord[0], (float)coord[1]);
-                            //    locationsList.Add(location);
-                            //}
-                            //else
-                            //{
-                            //    Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord[1], coord[0]);
-                            //    Vector3 point = new Vector3(point_GGRS87.x - startLocation.x, 0f, point_GGRS87.y - startLocation.y);
-
-                            //    waypointPositions.Add(point);
-                            //    waypointNames.Add($"{coord[1]},{coord[0]}");
-                            //}
                         }
                     }
                     if (routeVisualizationType != ElevationAPI.NO_ELEVATION)
@@ -156,7 +126,6 @@ namespace Assets.Scripts
 
         private async Task PrepareWaypointBatchWithElevations(Vector2 startPointInCartesianSpace, List<Vector2> tempLocationsList, bool clearStaleWaypoints)
         {
-            //List<Vector3> currentWaypointPositions = new List<Vector3>();
             List<string> waypointNames = new List<string>();
             foreach (var waypoint in tempLocationsList)
             {
@@ -167,33 +136,8 @@ namespace Assets.Scripts
             {
                 // OPEN_ELEVATION no longer supported
                 throw new NotSupportedException("OPEN_ELEVATION no longer supported");
-                //OpenElevationResponse elevationsResponse = await elevationQueryService.MakeOpenElevationQuery(tempLocationsList);
-                //foreach (var coord in elevationsResponse.results)
-                //{
-                //    Vector2 point_GGRS87 = reprojectionService.ReprojectPoint(coord.latitude, coord.longitude);
-
-                //    float y = (float)(coord.elevation - sceneController.GetElevationAtSceneLoad() - 1f);
-                //    Vector3 point = new Vector3(point_GGRS87.x - startPointInCartesianSpace.x, y, point_GGRS87.y - startPointInCartesianSpace.y);
-
-                //    currentWaypointPositions.Add(point);
-                //    waypointNames.Add($"{coord.latitude},{coord.longitude}");
-                //}
             }
-            //else
-            //{
-                //OpenTopoDataResponse elevationsResponse = await elevationQueryService.MakeOpenTopoDataQuery(tempLocationsList, routeVisualizationType);
 
-                //foreach (OpenTopoDataResult coord in elevationsResponse.results)
-                //{
-                //    Vector2 pointInCartesianSpace = reprojectionService.ReprojectPoint(coord.location.lat, coord.location.lng);
-
-                //    float y = coord.elevation - sceneController.GetElevationAtSceneLoad();
-                //    Vector3 point = new Vector3(pointInCartesianSpace.x - startPointInCartesianSpace.x, y, pointInCartesianSpace.y - startPointInCartesianSpace.y);
-
-                //    currentWaypointPositions.Add(point);
-                //    waypointNames.Add($"{coord.location.lat},{coord.location.lng}");
-                //}
-            //}
             List<Vector3> currentWaypointPositions = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(tempLocationsList, routeVisualizationType);
             VisualizeRoute(currentWaypointPositions, waypointNames, clearStaleWaypoints);
         }
