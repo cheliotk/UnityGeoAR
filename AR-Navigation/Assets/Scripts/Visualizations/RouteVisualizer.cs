@@ -169,7 +169,7 @@ namespace Assets.Scripts
             LineRenderer lren = line.GetComponent<LineRenderer>();
             lren.positionCount = waypointPositions.Count;
 
-            lren.SetPosition(0, Vector3.zero);
+            lren.SetPosition(0, waypointPositions[0]);
 
             for (int i = 1; i < waypointPositions.Count; i++)
             {
