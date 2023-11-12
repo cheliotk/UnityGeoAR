@@ -60,7 +60,7 @@ namespace Assets.Scripts
             lastLocationCompassData.isFirstUpdate = true;
             onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
 
-            Task<LocationServiceInitializationResult> initializationTask = Task.Run(async () => await locationUpdatesService.WaitForLocationServiceInitialization());
+            Task<LocationServiceInitResult> initializationTask = Task.Run(async () => await locationUpdatesService.InitializeService());
 
             // Wait for LocationUpdatesService to initialize
             while (!initializationTask.IsCompleted)
@@ -69,12 +69,12 @@ namespace Assets.Scripts
             }
 
             // First, check if user has location service enabled
-            if (initializationTask.Result == LocationServiceInitializationResult.NOT_ENABLED_BY_USER)
+            if (initializationTask.Result == LocationServiceInitResult.NOT_ENABLED_BY_USER)
             {
                 Debug.Log("Location disabled by user");
                 yield break;
             }
-            else if(initializationTask.Result == LocationServiceInitializationResult.FAILED_TO_INITIALIZE)
+            else if(initializationTask.Result == LocationServiceInitResult.FAILED_TO_INITIALIZE)
             {
                 Debug.Log("Timed out");
                 yield break;

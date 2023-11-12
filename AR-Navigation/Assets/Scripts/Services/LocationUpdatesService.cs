@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Services
 {
-    public enum LocationServiceInitializationResult
+    public enum LocationServiceInitResult
     {
         NOT_ENABLED_BY_USER = 0,
         FAILED_TO_INITIALIZE = 1,
@@ -19,7 +19,7 @@ namespace Assets.Scripts.Services
         private float desiredAccuracyInMeters;
         private float updateDistanceInMeters;
 
-        private LocationServiceInitializationResult initializationResult;
+        private LocationServiceInitResult initializationResult;
 
         public LocationUpdatesService(float desiredAccuracyInMeters, float updateDistanceInMeters)
         {
@@ -29,12 +29,12 @@ namespace Assets.Scripts.Services
             this.updateDistanceInMeters = updateDistanceInMeters;
         }
 
-        public async Task<LocationServiceInitializationResult> WaitForLocationServiceInitialization(int waitForInitializationMs = 20000)
+        public async Task<LocationServiceInitResult> InitializeService(int waitForInitializationMs = 20000)
         {
             // First, check if user has location service enabled
             if (!locationService.isEnabledByUser)
             {
-                initializationResult = LocationServiceInitializationResult.NOT_ENABLED_BY_USER;
+                initializationResult = LocationServiceInitResult.NOT_ENABLED_BY_USER;
                 return initializationResult;
             }
 
@@ -52,11 +52,11 @@ namespace Assets.Scripts.Services
             // Service didn't initialize before timeout
             if (waitForInitializationMs < 1)
             {
-                initializationResult = LocationServiceInitializationResult.FAILED_TO_INITIALIZE;
+                initializationResult = LocationServiceInitResult.FAILED_TO_INITIALIZE;
                 return initializationResult;
             }
 
-            initializationResult = LocationServiceInitializationResult.SUCCESS;
+            initializationResult = LocationServiceInitResult.SUCCESS;
             return initializationResult;
         }
 
@@ -75,7 +75,7 @@ namespace Assets.Scripts.Services
 
         public CompassData GetLatestCompassData()
         {
-            if(initializationResult != LocationServiceInitializationResult.SUCCESS)
+            if(initializationResult != LocationServiceInitResult.SUCCESS)
                 throw new InvalidOperationException("LocationUpdates has not initialized.");
             
             CompassData outCompassData = new CompassData();
@@ -101,7 +101,7 @@ namespace Assets.Scripts.Services
 
         public LocationData GetLatestLocationData()
         {
-            if (initializationResult != LocationServiceInitializationResult.SUCCESS)
+            if (initializationResult != LocationServiceInitResult.SUCCESS)
                 throw new InvalidOperationException("LocationUpdates has not initialized.");
             
             LocationData locationData = new LocationData();
@@ -115,7 +115,7 @@ namespace Assets.Scripts.Services
         public bool TryGetLatestLocationCompassData(ref LocationCompassData outLocationCompassData)
         {
             if(locationService.status != LocationServiceStatus.Running
-                || initializationResult != LocationServiceInitializationResult.SUCCESS)
+                || initializationResult != LocationServiceInitResult.SUCCESS)
             {
                 return false;
             }
@@ -126,7 +126,7 @@ namespace Assets.Scripts.Services
 
         public LocationCompassData GetLatestLocationCompassData()
         {
-            if (initializationResult != LocationServiceInitializationResult.SUCCESS)
+            if (initializationResult != LocationServiceInitResult.SUCCESS)
                 throw new InvalidOperationException("LocationUpdates has not initialized.");
 
             LocationCompassData result = new LocationCompassData();

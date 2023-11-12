@@ -88,7 +88,7 @@ namespace Assets.Scripts
             }
             else
             {
-                List<Vector3> waypoints = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(route, ElevationAPI.NO_ELEVATION);
+                List<Vector3> waypoints = await sceneController.WorldToUnityService.GetUnityPosFromCoords(route, ElevationAPI.NO_ELEVATION);
                 VisualizeRoute(waypoints, waypointNames, elevationAPI);
             }
         }
@@ -130,7 +130,7 @@ namespace Assets.Scripts
                 throw new NotSupportedException("OPEN_ELEVATION no longer supported");
             }
 
-            List<Vector3> currentWaypointPositions = await sceneController.WorldToUnityService.GetUnityPositionsFromCoordinates(tempLocationsList, elevationAPI);
+            List<Vector3> currentWaypointPositions = await sceneController.WorldToUnityService.GetUnityPosFromCoords(tempLocationsList, elevationAPI);
             VisualizeRoute(currentWaypointPositions, waypointNames, elevationAPI, clearStaleWaypoints);
         }
 

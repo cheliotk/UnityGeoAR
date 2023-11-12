@@ -12,25 +12,22 @@ namespace Assets.Scripts.Services
         private ElevationQueryService elevationQueryService;
         private Vector2 originLocationSourceCRS;
         private Vector2 originLocationDestinationCRS;
-        private float elevationOpenTopoData_ASTER;
-        private float elevationOpenTopoData_EUDEM;
+        private Dictionary<ElevationAPI, float> elevationsAtStartDict;
 
         public WorldToUnityService(
             ReprojectionService reprojectionService,
             ElevationQueryService elevationQueryService,
             Vector2 locationSourceLatLong,
-            float elevationOpenTopoData_ASTER,
-            float elevationOpenTopoData_EUDEM)
+            Dictionary<ElevationAPI, float> elevationsAtStartDict)
         {
             this.reprojectionService = reprojectionService;
             this.elevationQueryService = elevationQueryService;
             originLocationSourceCRS = locationSourceLatLong;
             originLocationDestinationCRS = reprojectionService.ReprojectPoint(originLocationSourceCRS.x, originLocationSourceCRS.y);
-            this.elevationOpenTopoData_ASTER = elevationOpenTopoData_ASTER;
-            this.elevationOpenTopoData_EUDEM = elevationOpenTopoData_EUDEM;
+            this.elevationsAtStartDict = elevationsAtStartDict;
         }
 
-        public async Task<Vector3> GetUnityPositionFromCoordinates(Vector2 xyCoords, ElevationAPI elevationAPI)
+        public async Task<Vector3> GetUnityPosFromCoords(Vector2 xyCoords, ElevationAPI elevationAPI)
         {
             if (elevationAPI == ElevationAPI.OPEN_ELEVATION)
                 throw new NotSupportedException("OPEN_ELEVATION no longer supported");
@@ -40,7 +37,7 @@ namespace Assets.Scripts.Services
                 return await ConvertWorldToUnityWithElevation(xyCoords, elevationAPI);
         }
 
-        public async Task<List<Vector3>> GetUnityPositionsFromCoordinates(List<Vector2> xyCoords, ElevationAPI elevationAPI)
+        public async Task<List<Vector3>> GetUnityPosFromCoords(List<Vector2> xyCoords, ElevationAPI elevationAPI)
         {
             if (elevationAPI == ElevationAPI.OPEN_ELEVATION)
                 throw new NotSupportedException("OPEN_ELEVATION no longer supported");
@@ -86,7 +83,7 @@ namespace Assets.Scripts.Services
             List<Vector2> locations = new List<Vector2> { xyCoords };
             OpenTopoDataResponse elevationResponse = await elevationQueryService.MakeOpenTopoDataQuery(locations, elevationAPI);
             float elevation = elevationResponse.results[0].elevation;
-            float unityY = elevationAPI == ElevationAPI.OPEN_TOPO_DATA_EUDEM ? elevation - elevationOpenTopoData_EUDEM : elevation - elevationOpenTopoData_ASTER;
+            float unityY = elevation - elevationsAtStartDict[elevationAPI];
 
             Vector3 point = ConvertWorldToUnityNoElevation(xyCoords);
             point.y = unityY;
@@ -109,8 +106,7 @@ namespace Assets.Scripts.Services
                 OpenTopoDataResult coord = elevationsResponse.results[i];
                 Vector2 pointInCartesianSpace = reprojectionService.ReprojectPoint(coord.location.lat, coord.location.lng);
 
-                //float elevation = coord.elevation;
-                float unityY = elevationAPI == ElevationAPI.OPEN_TOPO_DATA_EUDEM ? coord.elevation - elevationOpenTopoData_EUDEM : coord.elevation - elevationOpenTopoData_ASTER;
+                float unityY = coord.elevation - elevationsAtStartDict[elevationAPI];
                 Vector3 point = new Vector3(pointInCartesianSpace.x - originLocationDestinationCRS.x, unityY, pointInCartesianSpace.y - originLocationDestinationCRS.y);
                 points.Add(point);
             }

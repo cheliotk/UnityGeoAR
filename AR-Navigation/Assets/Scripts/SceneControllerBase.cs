@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Auxiliary;
 using Assets.Scripts.Interfaces;
 using Assets.Scripts.Services;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -26,11 +27,15 @@ namespace Assets.Scripts
             {
                 if(_worldToUnityService == null)
                 {
+                    var elevationsAtStartDict = new Dictionary<ElevationAPI, float>
+                    {
+                        { ElevationAPI.OPEN_TOPO_DATA_EUDEM, elevationOpenTopoData_EUDEM },
+                        { ElevationAPI.OPEN_TOPO_DATA_ASTER, elevationOpenTopoData_ASTER }
+                    };
                     _worldToUnityService = new WorldToUnityService(ReprojectionService,
                         ElevationQueryService,
                         locationSourceCRSAtSceneLoad,
-                        elevationOpenTopoData_ASTER,
-                        elevationOpenTopoData_EUDEM);
+                        elevationsAtStartDict);
                 }
 
                 return _worldToUnityService;

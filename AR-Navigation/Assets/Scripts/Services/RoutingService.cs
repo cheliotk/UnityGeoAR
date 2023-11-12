@@ -44,7 +44,7 @@ namespace Assets.Scripts.Services
             await RouteDirections_GET();
         }
 
-        public async Task RouteDirections_GET()
+        private async Task RouteDirections_GET()
         {
             if (string.IsNullOrWhiteSpace(openRouteServiceApiKey))
             {
