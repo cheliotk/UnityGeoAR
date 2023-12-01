@@ -60,23 +60,28 @@ namespace Assets.Scripts
             lastLocationCompassData.isFirstUpdate = true;
             onLocationCompassDataUpdatedEvent?.Invoke(this, lastLocationCompassData);
 
-            Task<LocationServiceInitResult> initializationTask = Task.Run(async () => await locationUpdatesService.InitializeService());
-
-            // Wait for LocationUpdatesService to initialize
-            while (!initializationTask.IsCompleted)
+            // Attempt to initialize the LocationUpdatesService
+            LocationServiceInitResult initializationResult = LocationServiceInitResult.NOT_ENABLED_BY_USER;
+            bool enabledByUser = locationUpdatesService.InitializeServiceIfEnabledByUser();
+            if (!enabledByUser)
             {
-                yield return null;
-            }
-
-            // First, check if user has location service enabled
-            if (initializationTask.Result == LocationServiceInitResult.NOT_ENABLED_BY_USER)
-            {
-                Debug.Log("Location disabled by user");
+                Debug.Log("LocationUpdates disabled by user");
                 yield break;
             }
-            else if(initializationTask.Result == LocationServiceInitResult.FAILED_TO_INITIALIZE)
+
+            initializationResult = LocationServiceInitResult.INITIALIZING;
+            int waitForInitializationSecs = 20;
+            while (!locationUpdatesService.IsInitialized() && waitForInitializationSecs > 0)
             {
-                Debug.Log("Timed out");
+                yield return new WaitForSeconds(1);
+                waitForInitializationSecs -= 1;
+            }
+
+            initializationResult = waitForInitializationSecs <= 0 ? LocationServiceInitResult.INITIALIZING : LocationServiceInitResult.SUCCESS;
+
+            if(initializationResult == LocationServiceInitResult.INITIALIZING)
+            {
+                Debug.Log("LocationUpdates timed out");
                 yield break;
             }
 

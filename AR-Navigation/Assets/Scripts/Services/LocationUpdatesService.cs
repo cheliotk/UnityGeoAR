@@ -8,7 +8,7 @@ namespace Assets.Scripts.Services
     public enum LocationServiceInitResult
     {
         NOT_ENABLED_BY_USER = 0,
-        FAILED_TO_INITIALIZE = 1,
+        INITIALIZING = 1,
         SUCCESS = 2
     }
     public class LocationUpdatesService
@@ -29,35 +29,29 @@ namespace Assets.Scripts.Services
             this.updateDistanceInMeters = updateDistanceInMeters;
         }
 
-        public async Task<LocationServiceInitResult> InitializeService(int waitForInitializationMs = 20000)
+        public bool InitializeServiceIfEnabledByUser()
         {
             // First, check if user has location service enabled
             if (!locationService.isEnabledByUser)
             {
                 initializationResult = LocationServiceInitResult.NOT_ENABLED_BY_USER;
-                return initializationResult;
+                return false;
             }
 
             // Start service before querying location
             Input.location.Start(desiredAccuracyInMeters, updateDistanceInMeters);
             Input.compass.enabled = true;
 
-            // Wait until service initializes
-            while (Input.location.status == LocationServiceStatus.Initializing && waitForInitializationMs > 0)
-            {
-                await Task.Delay(1000);
-                waitForInitializationMs -= 1000;
-            }
+            initializationResult = LocationServiceInitResult.INITIALIZING;
+            return true;
+        }
 
-            // Service didn't initialize before timeout
-            if (waitForInitializationMs < 1)
-            {
-                initializationResult = LocationServiceInitResult.FAILED_TO_INITIALIZE;
-                return initializationResult;
-            }
+        public bool IsInitialized()
+        {
+            if (Input.location.status == LocationServiceStatus.Running)
+                initializationResult = LocationServiceInitResult.SUCCESS;
 
-            initializationResult = LocationServiceInitResult.SUCCESS;
-            return initializationResult;
+            return initializationResult == LocationServiceInitResult.SUCCESS;
         }
 
         public bool TryGetLatestCompassData(ref CompassData outCompassData)
