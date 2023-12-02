@@ -62,7 +62,7 @@ namespace Assets.Scripts
 
             // Attempt to initialize the LocationUpdatesService
             LocationServiceInitResult initializationResult = LocationServiceInitResult.NOT_ENABLED_BY_USER;
-            bool enabledByUser = locationUpdatesService.InitializeServiceIfEnabledByUser();
+            bool enabledByUser = locationUpdatesService.InitializeService();
             if (!enabledByUser)
             {
                 Debug.Log("LocationUpdates disabled by user");

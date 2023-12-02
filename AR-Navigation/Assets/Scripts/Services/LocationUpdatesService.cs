@@ -29,7 +29,7 @@ namespace Assets.Scripts.Services
             this.updateDistanceInMeters = updateDistanceInMeters;
         }
 
-        public bool InitializeServiceIfEnabledByUser()
+        public bool InitializeService()
         {
             // First, check if user has location service enabled
             if (!locationService.isEnabledByUser)
@@ -69,7 +69,7 @@ namespace Assets.Scripts.Services
 
         public CompassData GetLatestCompassData()
         {
-            if(initializationResult != LocationServiceInitResult.SUCCESS)
+            if(!IsInitialized())
                 throw new InvalidOperationException("LocationUpdates has not initialized.");
             
             CompassData outCompassData = new CompassData();
@@ -95,7 +95,7 @@ namespace Assets.Scripts.Services
 
         public LocationData GetLatestLocationData()
         {
-            if (initializationResult != LocationServiceInitResult.SUCCESS)
+            if (!IsInitialized())
                 throw new InvalidOperationException("LocationUpdates has not initialized.");
             
             LocationData locationData = new LocationData();
@@ -120,7 +120,7 @@ namespace Assets.Scripts.Services
 
         public LocationCompassData GetLatestLocationCompassData()
         {
-            if (initializationResult != LocationServiceInitResult.SUCCESS)
+            if (!IsInitialized())
                 throw new InvalidOperationException("LocationUpdates has not initialized.");
 
             LocationCompassData result = new LocationCompassData();
