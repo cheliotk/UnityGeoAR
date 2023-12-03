@@ -27,7 +27,7 @@ Fork/Copy/Download this repository and open in the Unity Editor.
 
 5. If using your own implementation of `SceneControllerBase`, also make sure to offset the Y rotation of the AR Session Origin GameObject (that is the parent of the ARCamera) by `compassHeadingAtSceneLoad` degrees.
 
-6. Now you can use the methods provided in `SceneControllerBase.SceneControllerBase` to reproject objects geolocated near the user's location, and place them in the scene around the camera.
+6. Now you can use the methods provided in `SceneControllerBase.WorldToUnityService` to reproject objects geolocated near the user's location, and place them in the scene around the camera.
 
 # Example
 
